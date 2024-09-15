@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../login/login.dart'; // Import your login screen
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -15,37 +16,37 @@ class _SignupScreenState extends State<SignupScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sign Up'),
-        backgroundColor: const Color(0xFFD8A25E),
+        backgroundColor: Theme.of(context).colorScheme.primary, // Use theme color
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // Email/Phone Number Input
+            // Email or Phone Number Field
             TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Email or Phone Number',
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 20),
 
-            // Username Input
+            // Username Field
             TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Username',
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 20),
 
-            // Password Input
+            // Password Field
             TextField(
               obscureText: !_isPasswordVisible,
               decoration: InputDecoration(
                 labelText: 'Password',
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 suffixIcon: IconButton(
                   icon: Icon(
                     _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
@@ -60,12 +61,12 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
             const SizedBox(height: 20),
 
-            // Confirm Password Input
+            // Confirm Password Field
             TextField(
               obscureText: !_isPasswordVisible,
               decoration: InputDecoration(
                 labelText: 'Confirm Password',
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 suffixIcon: IconButton(
                   icon: Icon(
                     _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
@@ -86,7 +87,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 // Implement signup logic
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFD8A25E),
+                backgroundColor: Theme.of(context).colorScheme.primary, // Use theme color
                 padding: const EdgeInsets.symmetric(vertical: 15),
               ),
               child: const Center(
@@ -95,15 +96,19 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
             const SizedBox(height: 20),
 
-            // "Already have an account? Log In"
+            // Log In Navigation
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text('Already have an account?'),
                 TextButton(
                   onPressed: () {
-                    // Navigate to Login screen
-                    Navigator.of(context).pushReplacementNamed('/login');
+                    // Navigate to LoginScreen
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const LoginScreen(),
+                      ),
+                    );
                   },
                   child: const Text('Log In'),
                 ),

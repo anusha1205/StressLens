@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../signup/signup.dart'; // Import your signup screen
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -8,29 +9,29 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login'),
-        backgroundColor: const Color(0xFFD8A25E),
+        backgroundColor: Theme.of(context).colorScheme.primary, // Use the color from the theme
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // Email/Phone Number Input
+            // Email or Phone Number Field
             TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Email or Phone Number',
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 20),
 
-            // Password Input
+            // Password Field
             TextField(
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Password',
                 border: OutlineInputBorder(),
-                suffixIcon: Icon(Icons.visibility), // Eye icon for password visibility
+                suffixIcon: Icon(Icons.visibility),
               ),
             ),
             const SizedBox(height: 20),
@@ -41,24 +42,29 @@ class LoginScreen extends StatelessWidget {
                 // Implement login logic
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFD8A25E),
+                backgroundColor: Theme.of(context).colorScheme.primary, // Use the theme color
                 padding: const EdgeInsets.symmetric(vertical: 15),
               ),
               child: const Center(
                 child: Text('Log In'),
+
               ),
             ),
             const SizedBox(height: 20),
 
-            // "Don't have an account? Sign up"
+            // Sign Up Navigation
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text('Don’t have an account?'),
                 TextButton(
                   onPressed: () {
-                    // Navigate to Sign Up screen
-                    Navigator.of(context).pushReplacementNamed('/signup');
+                    // Navigate to SignupScreen
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const SignupScreen(),
+                      ),
+                    );
                   },
                   child: const Text('Sign Up'),
                 ),

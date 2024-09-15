@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'StressLens',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFFD8A25E)), // Updated theme color
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF0E8388)), // Updated theme color
         useMaterial3: true,
       ),
       home: const SplashScreen(), // Set splash screen as the initial page
@@ -34,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 2), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const MyHomePage(title: 'StressLens')),
       );
@@ -51,10 +51,10 @@ class _SplashScreenState extends State<SplashScreen> {
           children: <Widget>[
             Image.asset(
               'assets/logo.png', // Replace with your app logo
-              width: 150,
-              height: 150,
+              width: 200,
+              height: 200,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 70),
             const CircularProgressIndicator(),
           ],
         ),
@@ -76,10 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
+      // Removed AppBar as instructed
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -87,22 +84,32 @@ class _MyHomePageState extends State<MyHomePage> {
             // App Logo
             Image.asset(
               'assets/logo.png', // Replace with your app logo
-              width: 100,
-              height: 100,
+              width: 220,
+              height: 220,
             ),
             const SizedBox(height: 20),
 
-            // App Name and Tagline
+            // App Name (StressLens)
             const Text(
               'StressLens',
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 32, // Adjust font size as necessary
+                fontWeight: FontWeight.bold,
+                color: Colors.black, // Adjust text color as necessary
+              ),
             ),
-            const SizedBox(height: 5),
+            const SizedBox(height: 10),
+
+            // Tagline
             const Text(
-              'See stress clearly, live more calmly',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              'See Stress clearly, Live more calmly',
+              style: TextStyle(
+                fontSize: 16, // Adjust font size as necessary
+                fontStyle: FontStyle.italic,
+                color: Colors.grey, // Adjust text color as necessary
+              ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 40), // Adjust spacing as necessary
 
             // Login and Sign Up Buttons (Side by Side)
             Row(
@@ -115,20 +122,22 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                   child: const Text('Log In'),
                   style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                    backgroundColor: const Color(0xFFD8A25E),
+                    backgroundColor: const Color(0xFF0E8388), // Button color
                   ),
                 ),
                 const SizedBox(width: 20),
-                OutlinedButton(
+                ElevatedButton(
                   onPressed: () {
                     // Navigate to Sign Up Screen
                     Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignupScreen()));
                   },
                   child: const Text('Sign Up'),
-                  style: OutlinedButton.styleFrom(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                    side: const BorderSide(color: Color(0xFFD8A25E)),
+                    backgroundColor: const Color(0xFF0E8388), // Button color
                   ),
                 ),
               ],
@@ -139,3 +148,4 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
