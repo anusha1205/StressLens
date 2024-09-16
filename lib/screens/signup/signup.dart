@@ -32,6 +32,15 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
             const SizedBox(height: 20),
 
+            // Full Name Field (new)
+            TextField(
+              decoration: const InputDecoration(
+                labelText: 'Full Name',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20),
+
             // Username Field
             TextField(
               decoration: const InputDecoration(
