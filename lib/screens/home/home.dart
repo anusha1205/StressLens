@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:async'; // Import for Timer
 
@@ -24,7 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
       if (_start == 0) {
         timer.cancel();
         // Play a sound or vibrate device to signify end of session
-        // Example: Using Vibration package or Sound package can be used for sound alerts
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -114,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           child: Image.asset(
-            'assets/stress_graph.png', // Replace with the actual image path
+            'assets/stress_graph/stress_graph_image.png', // Replace with the actual image path
             fit: BoxFit.cover,
           ),
         ),
@@ -143,14 +143,15 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 10),
-        _buildRecommendationCard('Meditation', 'Deep Sleep', 'Sooth your mind and body, drift into dreamland'),
-        _buildRecommendationCard('Calm', 'Peaceful Music', 'Relax with soothing sounds'),
+        _buildRecommendationCard('Meditation', 'Deep Sleep', 'Sooth your mind and body, drift into dreamland', Colors.lightBlueAccent.withOpacity(0.2)),
+        _buildRecommendationCard('Calm', 'Peaceful Music', 'Relax with soothing sounds', Colors.lightGreenAccent.withOpacity(0.2)),
       ],
     );
   }
 
-  Widget _buildRecommendationCard(String category, String title, String description) {
+  Widget _buildRecommendationCard(String category, String title, String description, Color bgColor) {
     return Card(
+      color: bgColor, // Light background color
       elevation: 4,
       child: ListTile(
         leading: const Icon(Icons.play_circle_fill, size: 50),
@@ -158,68 +159,69 @@ class _HomeScreenState extends State<HomeScreen> {
         subtitle: Text(description),
         onTap: () {
           // Add play music logic here
-          // Example: You can integrate with a music streaming API
         },
       ),
     );
   }
 
-  // Bottom navigation bar widget
+
+
   Widget _buildBottomNavigationBar() {
-    return BottomNavigationBar(
-      backgroundColor: Theme.of(context).colorScheme.primary, // Dark green background
-      currentIndex: _currentIndex,
-      onTap: (int index) {
-        setState(() {
-          _currentIndex = index;
-        });
-        // Navigate to different screens based on index
-        switch (_currentIndex) {
-          case 0:
-          // Navigate to ChatBot screen
-            Navigator.pushNamed(context, '/chatbot');
-            break;
-          case 1:
-          // Navigate to Music screen
-            Navigator.pushNamed(context, '/music');
-            break;
-          case 2:
-          // Stay on Home screen
-            break;
-          case 3:
-          // Navigate to Games screen
-            Navigator.pushNamed(context, '/games');
-            break;
-          case 4:
-          // Navigate to Profile screen
-            Navigator.pushNamed(context, '/profile');
-            break;
-        }
-      },
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.chat_bubble_outline),
-          label: 'ChatBot',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.music_note),
-          label: 'Music',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.games_outlined),
-          label: 'Games',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person_outline),
-          label: 'Profile',
-        ),
-      ],
-      selectedItemColor: Colors.white,
-      unselectedItemColor: Colors.grey,
+    return Container(
+      height: 90, // Set your desired height here
+      child: BottomNavigationBar(
+        backgroundColor: const Color(0xFF0B3534),
+        currentIndex: _currentIndex,
+        onTap: (int index) {
+          setState(() {
+            _currentIndex = index;
+          });
+          // Navigate to different screens based on index
+          switch (_currentIndex) {
+            case 0:
+              Navigator.pushNamed(context, '/chatbot');
+              break;
+            case 1:
+              Navigator.pushNamed(context, '/music');
+              break;
+            case 2:
+              break;
+            case 3:
+              Navigator.pushNamed(context, '/games');
+              break;
+            case 4:
+              Navigator.pushNamed(context, '/profile');
+              break;
+          }
+        },
+        type: BottomNavigationBarType.fixed,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat_bubble_outline),
+            label: 'ChatBot',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.music_note),
+            label: 'Music',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.games_outlined),
+            label: 'Games',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            label: 'Profile',
+          ),
+        ],
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.green[300],
+        selectedLabelStyle: TextStyle(color: Colors.green[300]),
+        unselectedLabelStyle: TextStyle(color: Colors.green[300]),
+      ),
     );
   }
 
@@ -228,9 +230,19 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home Page'),
-        backgroundColor: Theme.of(context).colorScheme.primary, // Use theme color
+        title: const Text('Home Page', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color(0xFF0B3534),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              // No need to navigate, AuthWrapper will handle it
+            },
+          ),
+        ],
       ),
+      backgroundColor: const Color(0xFFF3FFFF),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -246,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(), // Updated navigation bar
+      bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 }

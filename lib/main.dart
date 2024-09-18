@@ -1,9 +1,16 @@
+import 'package:StressLens/screens/navbar/chatbot/chatbot.dart';
+import 'package:StressLens/screens/navbar/games/games.dart';
+import 'package:StressLens/screens/navbar/music/music.dart';
+import 'package:StressLens/screens/navbar/profile/profile.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 // import 'package:your_app/screens/signup/signup.dart';
 import 'dart:async';
 import 'screens/login/login.dart'; // Import the login screen
 import 'screens/signup/signup.dart'; // Import the signup screen
+import 'screens/home/home.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,17 +19,57 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'StressLens',
+      title: 'Your App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF0E8388)), // Updated theme color
-        useMaterial3: true,
+        primaryColor: const Color(0xFFBFFFFE),
+        scaffoldBackgroundColor: const Color(0xFFF3FFFF),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFF0B3534),
+          foregroundColor: Colors.white,
+        ),
       ),
-      home: const SplashScreen(), // Set splash screen as the initial page
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const AuthWrapper(),
+        '/home': (context) => const HomeScreen(),
+        '/chatbot': (context) => const ChatbotScreen(),
+        '/music': (context) => const MusicScreen(),
+        '/games': (context) => const GamesScreen(),
+        '/profile': (context) => const ProfileScreen(),
+      },
+      // home: const AuthWrapper(),
+    );
+  }
+}
+
+
+class AuthWrapper extends StatelessWidget {
+  const AuthWrapper({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.active) {
+          User? user = snapshot.data;
+          if (user == null) {
+            return const LoginScreen();
+          } else {
+            return const HomeScreen();
+          }
+        }
+        return const Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
     );
   }
 }

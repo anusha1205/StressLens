@@ -25,9 +25,9 @@ class _SignupScreenState extends State<SignupScreen> {
           email: _emailController.text.trim(),
           password: _passwordController.text,
         );
-        
+
         // TODO: Store additional user information (full name, username) in Firestore or Realtime Database
-        
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Sign up successful!')),
         );
@@ -44,7 +44,7 @@ class _SignupScreenState extends State<SignupScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sign Up'),
-        backgroundColor: Theme.of(context).colorScheme.primary, // Use theme color
+        backgroundColor: const Color(0xFF0B3534), // Dark green AppBar
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -53,6 +53,22 @@ class _SignupScreenState extends State<SignupScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              TextFormField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your email';
+                  }
+                  // You can add more sophisticated email validation here
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+
               TextFormField(
                 controller: _fullNameController,
                 decoration: const InputDecoration(
@@ -78,22 +94,6 @@ class _SignupScreenState extends State<SignupScreen> {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a username';
                   }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  // You can add more sophisticated email validation here
                   return null;
                 },
               ),
@@ -154,14 +154,20 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               const SizedBox(height: 20),
 
-              ElevatedButton(
-                onPressed: _signUp,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary, // Use theme color
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                ),
-                child: const Center(
-                  child: Text('Sign Up'),
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 2, // Half the screen width
+                child: ElevatedButton(
+                  onPressed: _signUp,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF0B3534), // Dark green button
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'Sign Up',
+                      style: TextStyle(color: Colors.white), // White text
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: 20),

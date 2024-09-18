@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../signup/signup.dart'; // Import your signup screen
-import '../home/home.dart'; // Import your home screen
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -23,12 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
           email: _emailController.text.trim(),
           password: _passwordController.text,
         );
-        // Navigate to HomePage when login is successful
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
-          ),
-        );
+        // No need to navigate, AuthWrapper will handle it
       } on FirebaseAuthException catch (e) {
         String errorMessage = 'An error occurred. Please try again.';
         if (e.code == 'user-not-found' || e.code == 'wrong-password') {
@@ -46,7 +40,8 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login'),
-        backgroundColor: Theme.of(context).colorScheme.primary, // Use the theme color
+        backgroundColor: Color(0xFF0B3534), // Light background color
+        foregroundColor: Colors.white, // Set text color to black for contrast
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -101,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: ElevatedButton(
                   onPressed: _login,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary, // Use the theme color
+                    backgroundColor: Color(0xFF0B3534), // dark background color
                     padding: const EdgeInsets.symmetric(vertical: 15),
                   ),
                   child: const Text(
