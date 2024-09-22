@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Your App',
+      title: 'StressLens',
       theme: ThemeData(
         primaryColor: const Color(0xFFBFFFFE),
         scaffoldBackgroundColor: const Color(0xFFF3FFFF),

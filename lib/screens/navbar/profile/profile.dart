@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'editprofile.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -10,6 +11,43 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   int _currentIndex = 4; // Default to profile being selected
+  String? userEmail;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserEmail();
+  }
+
+  Future<void> _fetchUserEmail() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    setState(() {
+      userEmail = user?.email; // Fetch and set the user's email
+    });
+  }
+
+  Future<void> _logout(BuildContext context) async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      print('User logged out successfully');
+
+      // Clear stored credentials
+      await _clearStoredCredentials();
+
+      // Navigate to the login screen after logout
+      Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+    } catch (e) {
+      print('Error during logout: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to log out. Please try again.')),
+      );
+    }
+  }
+
+  Future<void> _clearStoredCredentials() async {
+    // Implement secure storage to clear the stored email and password
+    print('Clearing stored credentials');
+  }
 
   // BottomNavigationBar
   Widget _buildBottomNavigationBar() {
@@ -93,40 +131,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 16),
             const Center(
               child: Text(
-                'John Doe',
+                'Admin',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
               ),
             ),
-            const SizedBox(height: 24),
-            _buildInfoTile('Email', 'johndoe@example.com'),
+            const SizedBox(height: 16),
+            _buildInfoTile('Email', userEmail ?? 'Loading...'), // Display email
             _buildInfoTile('Phone', '+1 234 567 8900'),
-            _buildInfoTile('Location', 'New York, USA'),
+            _buildInfoTile('Location', 'Mumbai, India'),
             const SizedBox(height: 24),
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  // Implement edit profile logic here
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => EditProfileScreen()),
+                  );
                 },
                 child: const Text('Edit Profile'),
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.black,
                   backgroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12), // Smaller button size
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 ),
               ),
             ),
             const SizedBox(height: 16),
             Center(
               child: ElevatedButton(
-                onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
-                  // Navigate to the login page or AuthWrapper
-                },
+                onPressed: () => _logout(context),
                 child: const Text('Logout'),
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.black,
                   backgroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12), // Smaller button size
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 ),
               ),
             ),

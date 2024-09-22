@@ -4,7 +4,18 @@ import 'dart:async'; // Import for Timer
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
+  Future<void> _logout(BuildContext context) async {
+  try {
+    await FirebaseAuth.instance.signOut();
+    print('User logged out successfully');
+    // No need to navigate manually, AuthWrapper will handle it
+  } catch (e) {
+    print('Error during logout: $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Failed to log out. Please try again.')),
+    );
+  }
+}
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -13,7 +24,19 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 2; // Default to home being selected
   Timer? _timer;
   int _start = 10; // 10 minutes in seconds
-
+  Future<void> _logout(BuildContext context) async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      print('User logged out successfully');
+      // Navigate to login screen after logout
+      Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+    } catch (e) {
+      print('Error during logout: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to log out. Please try again.')),
+      );
+    }
+  }
   // Start meditation timer logic
   void _startMeditationTimer() {
     const oneSec = Duration(seconds: 1);
