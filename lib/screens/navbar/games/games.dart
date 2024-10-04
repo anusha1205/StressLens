@@ -13,31 +13,32 @@ class _GamesScreenState extends State<GamesScreen> {
   // Reuse the BottomNavigationBar
   Widget _buildBottomNavigationBar() {
     return Container(
-      height: 90, // Set your desired height here
+      height: 90,
       child: BottomNavigationBar(
         backgroundColor: const Color(0xFF0B3534), // Dark green background
         currentIndex: _currentIndex,
         onTap: (int index) {
-          setState(() {
-            _currentIndex = index;
-          });
           // Navigate to different screens based on index
-          switch (_currentIndex) {
+          switch (index) {
             case 0:
-              Navigator.pushNamed(context, '/chatbot');
+              Navigator.pushReplacementNamed(context, '/chatbot');
               break;
             case 1:
-              Navigator.pushNamed(context, '/music');
+              Navigator.pushReplacementNamed(context, '/music');
               break;
             case 2:
-              Navigator.pushNamed(context, '/home');
+              Navigator.pushReplacementNamed(context, '/home');
               break;
             case 3:
               break; // Stay on Games
             case 4:
-              Navigator.pushNamed(context, '/profile');
+              Navigator.pushReplacementNamed(context, '/profile');
               break;
           }
+          // Update the current index
+          setState(() {
+            _currentIndex = index;
+          });
         },
         type: BottomNavigationBarType.fixed,
         items: const [
@@ -63,7 +64,7 @@ class _GamesScreenState extends State<GamesScreen> {
           ),
         ],
         selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.green[300],
+        unselectedItemColor: Colors.green,
         selectedLabelStyle: TextStyle(color: Colors.green[300]),
         unselectedLabelStyle: TextStyle(color: Colors.green[300]),
       ),
@@ -78,37 +79,57 @@ class _GamesScreenState extends State<GamesScreen> {
         backgroundColor: const Color(0xFF0B3534), // Dark green AppBar
       ),
       backgroundColor: const Color(0xFFF3FFFF), // Light background color
-      body: GridView.count(
-        crossAxisCount: 2,
-        padding: const EdgeInsets.all(16),
-        children: [
-          _buildGameTile('Puzzle', Icons.extension),
-          _buildGameTile('Memory', Icons.memory),
-          _buildGameTile('Quiz', Icons.quiz),
-          _buildGameTile('Sudoku', Icons.grid_on),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center( // Center the column
+          child: SingleChildScrollView( // Enable scrolling
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+              children: [
+                _buildGameCard('Dino Run', 'assets/games/dino_run_logo.png', '/dino_run'),
+                const SizedBox(height: 32), // Double the space between cards
+                _buildGameCard('2048 Game', 'assets/games/2048.png', '/game_2048'),
+                const SizedBox(height: 32), // Double the space between cards
+                _buildGameCard('Snake Game', 'assets/games/snake_game.png', '/snake_game'),
+                const SizedBox(height: 32), // Double the space between cards
+                _buildGameCard('Tetris', 'assets/games/tetris_logo.png', '/tetris_game'),
+                // Add more games here if needed
+              ],
+            ),
+          ),
+        ),
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(), // Add BottomNavigationBar here
+      bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
-  Widget _buildGameTile(String title, IconData icon) {
-    return Card(
-      color: Colors.black.withOpacity(0.1), // Semi-transparent dark card background
-      child: InkWell(
-        onTap: () {
-          // Implement game launch logic here
-        },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 50, color: Colors.lightGreenAccent), // Light green icons
-            const SizedBox(height: 8),
-            Text(
-              title,
-              style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold), // Dark text
+  Widget _buildGameCard(String title, String imagePath, String route) {
+    return SizedBox(
+      width: 280, // Increased width for the game cards
+      child: Card(
+        color: Color(0xFF0B3534), // Semi-transparent dark card background
+        child: InkWell(
+          onTap: () {
+            Navigator.pushNamed(context, route);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+              children: [
+                Image.asset(imagePath, width: 150, height: 150), // Image centered
+                const SizedBox(height: 8), // Space between image and text
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 28, // Font size for the title
+                    fontWeight: FontWeight.bold,
+                  ), // Dark text
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

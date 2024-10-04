@@ -4,18 +4,7 @@ import 'dart:async'; // Import for Timer
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-  Future<void> _logout(BuildContext context) async {
-  try {
-    await FirebaseAuth.instance.signOut();
-    print('User logged out successfully');
-    // No need to navigate manually, AuthWrapper will handle it
-  } catch (e) {
-    print('Error during logout: $e');
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Failed to log out. Please try again.')),
-    );
-  }
-}
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -23,31 +12,18 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 2; // Default to home being selected
   Timer? _timer;
-  int _start = 10; // 10 minutes in seconds
-  Future<void> _logout(BuildContext context) async {
-    try {
-      await FirebaseAuth.instance.signOut();
-      print('User logged out successfully');
-      // Navigate to login screen after logout
-      Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
-    } catch (e) {
-      print('Error during logout: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to log out. Please try again.')),
-      );
-    }
-  }
+  int _start = 600; // 10 minutes in seconds
+
   // Start meditation timer logic
   void _startMeditationTimer() {
     const oneSec = Duration(seconds: 1);
     _timer?.cancel(); // Cancel any previous timer
     setState(() {
-      _start = 10; // Reset timer to 10 minutes
+      _start = 600; // Reset timer to 10 minutes (600 seconds)
     });
     _timer = Timer.periodic(oneSec, (Timer timer) {
       if (_start == 0) {
         timer.cancel();
-        // Play a sound or vibrate device to signify end of session
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -77,7 +53,10 @@ class _HomeScreenState extends State<HomeScreen> {
     final seconds = (_start % 60).toString().padLeft(2, '0');
     return Text(
       'Time Left: $minutes:$seconds',
-      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      style: const TextStyle(fontSize: 18,
+          fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
     );
   }
 
@@ -86,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        color: Colors.lightBlueAccent.withOpacity(0.2), // Light blue background
+        color: const Color(0xFF0A3737), // Light blue background
         borderRadius: BorderRadius.circular(12.0),
       ),
       child: Column(
@@ -94,8 +73,13 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           const Text(
             'Reminder: 10-minute session for today\'s mood',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white, // Use 'color' instead of 'foreground'
+            ),
           ),
+
           const SizedBox(height: 10),
           ElevatedButton.icon(
             onPressed: _startMeditationTimer,
@@ -113,50 +97,71 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Stress level graph placeholder (image from assets)
+
+
+
+// Stress level graph placeholder (image from assets)
   Widget _buildStressLevelSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Stress Level',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 10),
-        Container(
-          height: 200, // Height for the graph
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 5,
-                spreadRadius: 2,
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Color(0xFFDAFBFF), // Light background color
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 5,
+            spreadRadius: 2,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Stress Level Graph',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            alignment: Alignment.center,
+            child: Container(
+              height: 213, // Height for the graph
+              width: 500,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 5,
+                    spreadRadius: 2,
+                  ),
+                ],
               ),
-            ],
+              child: Image.asset(
+                'assets/stress_graph/stress_graph_image.png', // Replace with the actual image path
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
-          child: Image.asset(
-            'assets/stress_graph/stress_graph_image.png', // Replace with the actual image path
-            fit: BoxFit.cover,
+          const SizedBox(height: 10),
+          ElevatedButton(
+            onPressed: () {
+              // Add analyze logic
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.black, // Dark color
+              foregroundColor: Colors.white, // White text
+            ),
+            child: const Text('Analyze'),
           ),
-        ),
-        const SizedBox(height: 10),
-        ElevatedButton(
-          onPressed: () {
-            // Add analyze logic
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.black, // Dark color
-            foregroundColor: Colors.white, // White text
-          ),
-          child: const Text('Analyze'),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
-  // Music recommendation section
+// Music recommendation section
   Widget _buildRecommendedSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,27 +170,126 @@ class _HomeScreenState extends State<HomeScreen> {
           'Recommended for you',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 10),
-        _buildRecommendationCard('Meditation', 'Deep Sleep', 'Sooth your mind and body, drift into dreamland', Colors.lightBlueAccent.withOpacity(0.2)),
-        _buildRecommendationCard('Calm', 'Peaceful Music', 'Relax with soothing sounds', Colors.lightGreenAccent.withOpacity(0.2)),
+        const SizedBox(height: 12),
+        _buildRecommendationCard(
+          'Meditation',
+          'Deep Sleep',
+          'Sooth your mind and body, drift into dreamland',
+          Color(0xDAA1FBFF),
+        ),
+        _buildRecommendationCard(
+          'Calm',
+          'Peaceful Music',
+          'Relax with soothing sounds',
+          Color(0xBEA1FFB7),
+        ),
       ],
     );
   }
-
   Widget _buildRecommendationCard(String category, String title, String description, Color bgColor) {
-    return Card(
-      color: bgColor, // Light background color
-      elevation: 4,
-      child: ListTile(
-        leading: const Icon(Icons.play_circle_fill, size: 50),
-        title: Text(title),
-        subtitle: Text(description),
-        onTap: () {
-          // Add play music logic here
-        },
+    return Container(
+      height: 110, // Set your desired height here
+      child: Card(
+        color: bgColor, // Light background color
+        elevation: 4,
+        child: ListTile(
+          leading: const Icon(Icons.play_circle_fill, size: 60),
+          title: Text(title, style: const TextStyle(fontSize: 18)),
+          subtitle: Text(description, style: const TextStyle(fontSize: 14)),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          onTap: () {
+            // Add play music logic here
+          },
+        ),
       ),
     );
   }
+
+
+
+
+
+
+// How are you feeling section
+  Widget _buildFeelingSection() {
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.orangeAccent.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'How are you feeling today?',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/qna'); // This should match '/qna'
+                    // Navigate to Q&A page
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                      color: Colors.blueAccent.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12.0),
+                      border: Border.all(color: Colors.blueAccent, width: 2),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Icon(Icons.question_answer, size: 50, color: Colors.blue),
+                        SizedBox(height: 10),
+                        Text(
+                          'Let\'s Do a Q&A',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/journal'); // Navigate to Journal page
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                      color: Colors.greenAccent.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12.0),
+                      border: Border.all(color: Colors.greenAccent, width: 2),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Icon(Icons.edit_note, size: 50, color: Colors.green),
+                        SizedBox(height: 10),
+                        Text(
+                          'Journal Section',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
 
 
 
@@ -241,20 +345,19 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.green[300],
+        unselectedItemColor: Colors.green,
         selectedLabelStyle: TextStyle(color: Colors.green[300]),
         unselectedLabelStyle: TextStyle(color: Colors.green[300]),
       ),
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Page', style: TextStyle(color: Colors.white)),
-        backgroundColor: Color(0xFF0B3534),
+        backgroundColor: const Color(0xFF0B3534),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -275,6 +378,8 @@ class _HomeScreenState extends State<HomeScreen> {
               _buildMeditationTimerSection(),
               const SizedBox(height: 20),
               _buildStressLevelSection(),
+              const SizedBox(height: 20),
+              _buildFeelingSection(), // Add the feeling section here
               const SizedBox(height: 20),
               _buildRecommendedSection(),
             ],
