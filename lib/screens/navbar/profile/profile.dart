@@ -124,49 +124,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             const Center(
               child: CircleAvatar(
-                radius: 50,
-                backgroundImage: AssetImage('assets/profile_picture.jpg'), // Add a default image
+                radius: 75,
+                backgroundImage: AssetImage('assets/user_image.png'), // Add a default image
               ),
             ),
             const SizedBox(height: 16),
             const Center(
               child: Text(
-                'Admin',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
+                'Name: Admin',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 25),
             _buildInfoTile('Email', userEmail ?? 'Loading...'), // Display email
             _buildInfoTile('Phone', '+1 234 567 8900'),
             _buildInfoTile('Location', 'Mumbai, India'),
             const SizedBox(height: 24),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => EditProfileScreen()),
-                  );
-                },
-                child: const Text('Edit Profile'),
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.black,
-                  backgroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+
+            // Row for Edit Profile and Logout buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => EditProfileScreen()),
+                      );
+                    },
+                    child: const Text('Edit Profile'),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white, // Change text color to white
+                      backgroundColor: Color(0xFF0B3534), // Dark background color
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Center(
-              child: ElevatedButton(
-                onPressed: () => _logout(context),
-                child: const Text('Logout'),
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.black,
-                  backgroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                const SizedBox(width: 16), // Space between buttons
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () => _logout(context),
+                    child: const Text('Logout'),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white, // Change text color to white
+                      backgroundColor: Color(0xFF0B3534), // Dark background color
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ],
         ),
