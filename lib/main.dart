@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'StressLens',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: const Color(0xFFBFFFFE),
         scaffoldBackgroundColor: const Color(0xFFF3FFFF),
@@ -81,6 +82,26 @@ class AuthWrapper extends StatelessWidget {
         );
       },
     );
+  }
+  Future<User?> _checkAuthStatus() async {
+    // Set persistence to LOCAL (this keeps the user logged in across app restarts)
+    await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
+    
+    // Get the current user (if any)
+    User? user = FirebaseAuth.instance.currentUser;
+    
+    if (user != null) {
+      // If we have a user, verify the token to ensure it's still valid
+      try {
+        await user.getIdToken(true);
+      } catch (e) {
+        // If token refresh fails, sign out the user
+        await FirebaseAuth.instance.signOut();
+        user = null;
+      }
+    }
+    
+    return user;
   }
 }
 
