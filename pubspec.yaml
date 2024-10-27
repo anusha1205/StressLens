@@ -30,6 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  http: ^0.13.4
+  just_audio: ^0.9.12
   firebase_core: ^3.5.0
   firebase_auth: ^5.3.0
 
@@ -70,6 +72,21 @@ flutter:
     - assets/games/tetris_logo.png
     - assets/games/snake_game.png
     - assets/user_image.png
+    - assets/music/birdsong.png
+    - assets/music/fireplace_glow.png
+    - assets/music/forest_dawn.png
+    - assets/music/mountain_breeze.png
+    - assets/music/calm_waves.png
+    - assets/music/gentle_winds.png
+    - assets/music/ocean_of_peace.png
+    - assets/music/soft_glow.png
+    - assets/music/thunderstorm_calm.png
+    - assets/music/tranquil_paths.png
+    - assets/music/electric_sunset.png
+    - assets/music/feel_the_flow.png
+    - assets/music/groove_wave.png
+    - assets/music/retro_vibes.png
+    - assets/music/soulful_symphony.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 
 class MusicScreen extends StatefulWidget {
   const MusicScreen({Key? key}) : super(key: key);
@@ -8,72 +9,45 @@ class MusicScreen extends StatefulWidget {
 }
 
 class _MusicScreenState extends State<MusicScreen> {
+  final AudioPlayer _audioPlayer = AudioPlayer();
   int _currentIndex = 1; // Default to music being selected
   String _selectedGenre = 'All';
   String _searchQuery = ''; // Variable to hold the search query
+  @override
+  void initState() {
+    super.initState();
+    // Additional initialization if needed
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose(); // Clean up the player when the widget is disposed
+    super.dispose();
+  }
 
   final List<Map<String, String>> musicList = [
-    {"title": "Birdsong Bliss", "genre": "Seasonal/ASMR"},
-    {"title": "Calm Waves", "genre": "Calm & Soothing"},
-    {"title": "Electric Sunset", "genre": "Youth-Focused"},
-    {"title": "Feel the Flow", "genre": "Youth-Focused"},
-    {"title": "Fireplace Glow", "genre": "Seasonal/ASMR"},
-    {"title": "Forest Dawn", "genre": "Seasonal/ASMR"},
-    {"title": "Gentle Winds", "genre": "Calm & Soothing"},
-    {"title": "Groove Wave", "genre": "Youth-Focused"},
-    {"title": "Mountain Breeze", "genre": "Seasonal/ASMR"},
-    {"title": "Ocean of Peace", "genre": "Calm & Soothing"},
-    {"title": "Raindrop Rhythm", "genre": "Seasonal/ASMR"},
-    {"title": "Retro Vibes", "genre": "Youth-Focused"},
-    {"title": "Rhythmic Escape", "genre": "Youth-Focused"},
-    {"title": "Soft Glow", "genre": "Calm & Soothing"},
-    {"title": "Soulful Symphony", "genre": "Calm & Soothing"},
-    {"title": "Thunderstorm Calm", "genre": "Seasonal/ASMR"},
-    {"title": "Tranquil Paths", "genre": "Calm & Soothing"},
-    {"title": "Urban Melody", "genre": "Youth-Focused"},
-    {"title": "Waterfall Harmony", "genre": "Seasonal/ASMR"},
-    {"title": "Whispers of the Forest", "genre": "Calm & Soothing"},
-    {"title": "Vibrant Skies", "genre": "Youth-Focused"},
-    {"title": "Raindrop Serenade", "genre": "Calm & Soothing"},
-    {"title": "Sunset Chill", "genre": "Youth-Focused"},
-    {"title": "Gentle Stream", "genre": "Calm & Soothing"},
-    {"title": "Nature's Heartbeat", "genre": "Seasonal/ASMR"},
-    {"title": "Joyful Laughter", "genre": "Youth-Focused"},
-    {"title": "Calm Under the Stars", "genre": "Calm & Soothing"},
-    {"title": "Winds of Change", "genre": "Youth-Focused"},
-    {"title": "Evening Tranquility", "genre": "Seasonal/ASMR"},
-    {"title": "Rainforest Echoes", "genre": "Seasonal/ASMR"},
-    {"title": "Breezy Days", "genre": "Seasonal/ASMR"},
-    {"title": "Ocean Whisper", "genre": "Calm & Soothing"},
-    {"title": "Twilight Groove", "genre": "Youth-Focused"},
-    {"title": "Golden Fields", "genre": "Seasonal/ASMR"},
-    {"title": "Soothing Sounds", "genre": "Calm & Soothing"},
-    {"title": "Endless Summer", "genre": "Youth-Focused"},
-    {"title": "Rainy Day Comfort", "genre": "Calm & Soothing"},
-    {"title": "Energizing Beats", "genre": "Youth-Focused"},
-    {"title": "Soft Petals", "genre": "Seasonal/ASMR"},
-    {"title": "Harmonious Reflections", "genre": "Calm & Soothing"},
-    {"title": "Life in Color", "genre": "Youth-Focused"},
-    {"title": "Winter's Whisper", "genre": "Seasonal/ASMR"},
-    {"title": "Melody of the Earth", "genre": "Calm & Soothing"},
-    {"title": "Festival of Lights", "genre": "Youth-Focused"},
-    {"title": "Awakening Spirit", "genre": "Youth-Focused"},
-    {"title": "Dewy Mornings", "genre": "Seasonal/ASMR"},
-    {"title": "Ethereal Calm", "genre": "Calm & Soothing"},
-    {"title": "Exciting Adventures", "genre": "Youth-Focused"},
-    {"title": "Mystical Forest", "genre": "Seasonal/ASMR"},
-    {"title": "Urban Dance", "genre": "Youth-Focused"},
-    {"title": "Waves of Serenity", "genre": "Calm & Soothing"},
-    {"title": "Sundown Bliss", "genre": "Youth-Focused"},
-    {"title": "Echoing Valleys", "genre": "Seasonal/ASMR"},
-    {"title": "Restful Night", "genre": "Calm & Soothing"},
-    {"title": "Dance of Joy", "genre": "Youth-Focused"},
-    {"title": "Nature's Embrace", "genre": "Seasonal/ASMR"},
-    {"title": "Embers of Hope", "genre": "Calm & Soothing"},
-    {"title": "Rhythmic Waves", "genre": "Youth-Focused"},
-    {"title": "Morning Haze", "genre": "Seasonal/ASMR"},
-    {"title": "Calm Reflection", "genre": "Calm & Soothing"}
-];
+    // Seasonal/ASMR
+    {"title": "Birdsong Bliss", "genre": "Seasonal/ASMR", "image": "assets/music/birdsong.png", "url": "https://example.com/birdsong.mp3"},
+    {"title": "Fireplace Glow", "genre": "Seasonal/ASMR", "image": "assets/music/fireplace_glow.png"},
+    {"title": "Forest Dawn", "genre": "Seasonal/ASMR", "image": "assets/music/forest_dawn.png"},
+    {"title": "Mountain Breeze", "genre": "Seasonal/ASMR", "image": "assets/music/mountain_breeze.png"},
+    {"title": "Thunderstorm Calm", "genre": "Seasonal/ASMR", "image": "assets/music/thunderstorm_calm.png"},
+
+    // Calm & Soothing
+    {"title": "Calm Waves", "genre": "Calm & Soothing", "image": "assets/music/calm_waves.png"},
+    {"title": "Gentle Winds", "genre": "Calm & Soothing", "image": "assets/music/gentle_winds.png"},
+    {"title": "Ocean of Peace", "genre": "Calm & Soothing", "image": "assets/music/ocean_of_peace.png"},
+    {"title": "Soft Glow", "genre": "Calm & Soothing", "image": "assets/music/soft_glow.png"},
+    {"title": "Tranquil Paths", "genre": "Calm & Soothing", "image": "assets/music/tranquil_paths.png"},
+
+    // Youth-Focused
+    {"title": "Electric Sunset", "genre": "Youth-Focused", "image": "assets/music/electric_sunset.png"},
+    {"title": "Feel the Flow", "genre": "Youth-Focused", "image": "assets/music/feel_the_flow.png"},
+    {"title": "Groove Wave", "genre": "Youth-Focused", "image": "assets/music/groove_wave.png"},
+    {"title": "Retro Vibes", "genre": "Youth-Focused", "image": "assets/music/retro_vibes.png"},
+    {"title": "Soulful Symphony", "genre": "Youth-Focused", "image": "assets/music/soulful_symphony.png"},
+
+  ];
 
   List<Map<String, String>> get filteredMusicList {
     return musicList.where((music) {
@@ -82,8 +56,15 @@ class _MusicScreenState extends State<MusicScreen> {
       return matchesGenre && matchesSearch;
     }).toList();
   }
+  Future<void> _playMusic(String url) async {
+    try {
+      await _audioPlayer.setAudioSource(AudioSource.uri(Uri.parse(url)));
+      _audioPlayer.play();
+    } catch (e) {
+      print("Error playing music: $e");
+    }
+  }
 
-  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,12 +126,20 @@ class _MusicScreenState extends State<MusicScreen> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
+            child: GridView.builder(
+              padding: const EdgeInsets.all(10.0),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, // Two items per row
+                crossAxisSpacing: 10.0,
+                mainAxisSpacing: 10.0,
+                childAspectRatio: 0.8, // Adjusts height of each card
+              ),
               itemCount: filteredMusicList.length,
               itemBuilder: (context, index) {
                 return _buildMusicTile(
                   filteredMusicList[index]["title"]!,
                   filteredMusicList[index]["genre"]!,
+                  filteredMusicList[index]["image"]!,
                   '3:45', // Placeholder duration
                 );
               },
@@ -162,25 +151,56 @@ class _MusicScreenState extends State<MusicScreen> {
     );
   }
 
-
-  Widget _buildMusicTile(String title, String genre, String duration) {
-    return ListTile(
-      leading: const Icon(Icons.music_note, color: Colors.lightGreenAccent),
-      title: Text(
-        title,
-        style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+  Widget _buildMusicTile(String title, String genre, String imagePath, String duration) {
+    return Card(
+      elevation: 5,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
       ),
-      subtitle: Text(
-        genre,
-        style: TextStyle(color: Colors.black.withOpacity(0.7)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(15),
+              topRight: Radius.circular(15),
+            ),
+            child: Image.asset(
+              imagePath,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: 100, // Adjust height as needed
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  genre,
+                  style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  duration,
+                  style: const TextStyle(color: Colors.grey, fontSize: 12),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-      trailing: Text(
-        duration,
-        style: const TextStyle(color: Colors.black),
-      ),
-      onTap: () {
-        // Implement music playback logic here
-      },
     );
   }
 
