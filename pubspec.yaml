@@ -67,10 +67,6 @@ flutter:
   assets:
     - assets/logo.png
     - assets/stress_graph/stress_graph_image.png
-    - assets/games/dino_run_logo.png
-    - assets/games/2048.png
-    - assets/games/tetris_logo.png
-    - assets/games/snake_game.png
     - assets/user_image.png
     - assets/music/birdsong.png
     - assets/music/fireplace_glow.png
@@ -87,6 +83,18 @@ flutter:
     - assets/music/groove_wave.png
     - assets/music/retro_vibes.png
     - assets/music/soulful_symphony.png
+    - assets/feeling_image/relax.png
+    - assets/feeling_image/focus.png
+    - assets/feeling_image/calm.png
+    - assets/feeling_image/anxious.png
+    - assets/feeling_image/stressed.png
+    - assets/games/flower_bloom.png
+    - assets/games/seed.jpg
+    - assets/games/sprout.png
+    - assets/games/full_plant.jpg
+    - assets/games/chill_farm.png
+
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:

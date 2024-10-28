@@ -86,14 +86,9 @@ class _GamesScreenState extends State<GamesScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center, // Center vertically
               children: [
-                _buildGameCard('Dino Run', 'assets/games/dino_run_logo.png', '/dino_run'),
-                const SizedBox(height: 32), // Double the space between cards
-                _buildGameCard('2048 Game', 'assets/games/2048.png', '/game_2048'),
-                const SizedBox(height: 32), // Double the space between cards
-                _buildGameCard('Snake Game', 'assets/games/snake_game.png', '/snake_game'),
-                const SizedBox(height: 32), // Double the space between cards
-                _buildGameCard('Tetris', 'assets/games/tetris_logo.png', '/tetris_game'),
-                // Add more games here if needed
+                _buildGameCard('Flower Bloom', 'assets/games/flower_bloom.png', '/flower_bloom'),
+                const SizedBox(height: 32), // Space between cards
+                _buildGameCard('Chill Farm', 'assets/games/chill_farm.png', '/chill_farm'),
               ],
             ),
           ),
@@ -107,7 +102,7 @@ class _GamesScreenState extends State<GamesScreen> {
     return SizedBox(
       width: 280, // Increased width for the game cards
       child: Card(
-        color: Color(0xFF0B3534), // Semi-transparent dark card background
+        color: Color(0xFF0B3534), // Dark card background
         child: InkWell(
           onTap: () {
             Navigator.pushNamed(context, route);
@@ -117,7 +112,7 @@ class _GamesScreenState extends State<GamesScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center, // Center vertically
               children: [
-                Image.asset(imagePath, width: 150, height: 150), // Image centered
+                Image.asset(imagePath, width: 150, height: 150), // Centered image
                 const SizedBox(height: 8), // Space between image and text
                 Text(
                   title,
@@ -125,7 +120,7 @@ class _GamesScreenState extends State<GamesScreen> {
                     color: Colors.white,
                     fontSize: 28, // Font size for the title
                     fontWeight: FontWeight.bold,
-                  ), // Dark text
+                  ),
                 ),
               ],
             ),

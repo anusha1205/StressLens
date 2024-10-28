@@ -2,11 +2,12 @@
 import 'package:StressLens/screens/home/journal/journal.dart';
 import 'package:StressLens/screens/home/qna_page/qna_page.dart';
 import 'package:StressLens/screens/navbar/chatbot/chatbot.dart';
-import 'package:StressLens/screens/navbar/games/dino_run.dart';
-import 'package:StressLens/screens/navbar/games/game_2048.dart';
+import 'package:StressLens/screens/navbar/games/chill_farm.dart';
+import 'package:StressLens/screens/navbar/games/flower_bloom.dart';
+
 import 'package:StressLens/screens/navbar/games/games.dart';
 import 'package:StressLens/screens/navbar/games/snake_game.dart';
-import 'package:StressLens/screens/navbar/games/tetris_game.dart';
+
 import 'package:StressLens/screens/navbar/music/music.dart';
 import 'package:StressLens/screens/navbar/profile/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -50,10 +51,8 @@ class MyApp extends StatelessWidget {
         '/qna': (context) =>  QnaPage(), // Ensure const constructors
         '/journal': (context) =>  JournalPage(), // Ensure const constructors
         '/games': (context) => const GamesScreen(),
-        '/dino_run': (context) => const DinoRun(),
-        '/game_2048': (context) => const Game2048(),
-        '/snake_game': (context) => const SnakeGame(),
-        '/tetris_game': (context) => const TetrisGame(),
+        '/flower_bloom': (context) => FlowerBloomScreen(),
+        '/chill_farm': (context) => ChillFarmScreen(), // Route to Chill Farm screen
       },
     );
   }

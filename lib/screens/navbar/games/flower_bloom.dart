@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 void main() {
   runApp(FlowerBloomApp());
@@ -22,6 +23,9 @@ class _FlowerBloomScreenState extends State<FlowerBloomScreen> with SingleTicker
   late AnimationController _controller;
   late Animation<double> _bloomAnimation;
   bool isInhale = true;
+  bool isAnimating = false;
+  Timer? _sessionTimer;
+  int _elapsedTime = 0; // Elapsed time in seconds
 
   @override
   void initState() {
@@ -29,7 +33,7 @@ class _FlowerBloomScreenState extends State<FlowerBloomScreen> with SingleTicker
 
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 4), // 4 seconds per breath (2 inhale + 2 exhale)
+      duration: Duration(seconds: 4),
     )..addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         setState(() {
@@ -48,14 +52,52 @@ class _FlowerBloomScreenState extends State<FlowerBloomScreen> with SingleTicker
       parent: _controller,
       curve: Curves.easeInOut,
     ));
-
-    _controller.forward();
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _sessionTimer?.cancel();
     super.dispose();
+  }
+
+  void _startAnimation() {
+    setState(() {
+      isAnimating = true;
+      _elapsedTime = 0; // Reset timer
+    });
+    _controller.forward();
+
+    // Start timer
+    _sessionTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        _elapsedTime++;
+      });
+    });
+  }
+
+  void _stopAnimation() {
+    setState(() {
+      isAnimating = false;
+      isInhale = true;
+    });
+    _controller.stop();
+    _sessionTimer?.cancel();
+
+    // Show popup with elapsed time
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Congratulations!'),
+        content: Text('You have breathed for ${_elapsedTime ~/ 60} minutes and ${_elapsedTime % 60} seconds.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -71,7 +113,9 @@ class _FlowerBloomScreenState extends State<FlowerBloomScreen> with SingleTicker
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              isInhale ? 'Inhale...' : 'Exhale...',
+              isAnimating
+                  ? (isInhale ? 'Inhale...' : 'Exhale...')
+                  : 'Press Start to Breathe',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -85,6 +129,18 @@ class _FlowerBloomScreenState extends State<FlowerBloomScreen> with SingleTicker
                 'assets/games/flower_bloom.png', // Add a flower image in assets folder
                 height: 200,
                 width: 200,
+              ),
+            ),
+            SizedBox(height: 40),
+            ElevatedButton(
+              onPressed: isAnimating ? _stopAnimation : _startAnimation,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: isAnimating ? Colors.red : Colors.green,
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              ),
+              child: Text(
+                isAnimating ? 'Stop' : 'Start',
+                style: TextStyle(fontSize: 18),
               ),
             ),
           ],
