@@ -41,6 +41,9 @@ dependencies:
   file_picker: ^5.0.0
   google_fonts: ^2.1.0
   table_calendar: ^3.0.6
+  audioplayers: ^6.1.0  # For sound effects
+  confetti: ^0.8.0       # For confetti effects
+
   # shared_preferences: ^2.1.1
 
 dev_dependencies:
@@ -93,6 +96,8 @@ flutter:
     - assets/games/sprout.png
     - assets/games/full_plant.jpg
     - assets/games/chill_farm.png
+    - assets/games/pop.mp3
+    - assets/games/bubble_pop.png
 
 
 

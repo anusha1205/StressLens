@@ -17,6 +17,8 @@ import 'dart:async';
 import 'screens/login/login.dart'; // Import the login screen
 import 'screens/signup/signup.dart'; // Import the signup screen
 import 'screens/home/home.dart';
+import 'package:StressLens/screens/navbar/games/bubble_pop.dart'; // Import BubbleWrapScreen file
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,6 +55,7 @@ class MyApp extends StatelessWidget {
         '/games': (context) => const GamesScreen(),
         '/flower_bloom': (context) => FlowerBloomScreen(),
         '/chill_farm': (context) => ChillFarmScreen(), // Route to Chill Farm screen
+        '/bubble_pop': (context) => BubbleWrapScreen(),
       },
     );
   }

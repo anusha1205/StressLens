@@ -89,6 +89,8 @@ class _GamesScreenState extends State<GamesScreen> {
                 _buildGameCard('Flower Bloom', 'assets/games/flower_bloom.png', '/flower_bloom'),
                 const SizedBox(height: 32), // Space between cards
                 _buildGameCard('Chill Farm', 'assets/games/chill_farm.png', '/chill_farm'),
+                const SizedBox(height: 32),
+                _buildGameCard('Bubble Pop', 'assets/games/bubble_pop.png', '/bubble_pop')
               ],
             ),
           ),
