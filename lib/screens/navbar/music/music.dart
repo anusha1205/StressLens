@@ -10,13 +10,14 @@ class MusicScreen extends StatefulWidget {
 
 class _MusicScreenState extends State<MusicScreen> {
   final AudioPlayer _audioPlayer = AudioPlayer();
+  bool _isPlaying = false;
+  String? _currentlyPlayingTitle;
   int _currentIndex = 1; // Default to music being selected
   String _selectedGenre = 'All';
   String _searchQuery = ''; // Variable to hold the search query
   @override
   void initState() {
     super.initState();
-    // Additional initialization if needed
   }
 
   @override
@@ -26,26 +27,37 @@ class _MusicScreenState extends State<MusicScreen> {
   }
 
   final List<Map<String, String>> musicList = [
+    // Youth-Focused
+    {"title": "Electric Sunset", "genre": "Youth-Focused", "image": "assets/music/electric_sunset.png", "url": "assets/music/music_files/electric_sunset.mp3"},
+    {"title": "Feel the Flow", "genre": "Youth-Focused", "image": "assets/music/feel_the_flow.png", "url": "assets/music/music_files/feel_the_flow.mp3"},
+    {"title": "Groove Wave", "genre": "Youth-Focused", "image": "assets/music/groove_wave.png", "url": "assets/music/music_files/groove_wave.mp3"},
+    {"title": "Retro Vibes", "genre": "Youth-Focused", "image": "assets/music/retro_vibes.png", "url": "assets/music/music_files/retro_vibes.mp3"},
+    {"title": "Soulful Symphony", "genre": "Youth-Focused", "image": "assets/music/soulful_symphony.png", "url": "assets/music/music_files/soulful_symphony.mp3"},
     // Seasonal/ASMR
-    {"title": "Birdsong Bliss", "genre": "Seasonal/ASMR", "image": "assets/music/birdsong.png", "url": "https://example.com/birdsong.mp3"},
-    {"title": "Fireplace Glow", "genre": "Seasonal/ASMR", "image": "assets/music/fireplace_glow.png"},
-    {"title": "Forest Dawn", "genre": "Seasonal/ASMR", "image": "assets/music/forest_dawn.png"},
-    {"title": "Mountain Breeze", "genre": "Seasonal/ASMR", "image": "assets/music/mountain_breeze.png"},
-    {"title": "Thunderstorm Calm", "genre": "Seasonal/ASMR", "image": "assets/music/thunderstorm_calm.png"},
+    {
+      "title": "Birdsong Bliss",
+      "genre": "Seasonal/ASMR",
+      "image": "assets/music/birdsong.png",
+      "url": "assets/music/music_files/birdsong.mp3"
+    },
+    {
+      "title": "Fireplace Glow",
+      "genre": "Seasonal/ASMR",
+      "image": "assets/music/fireplace_glow.png",
+      "url": "assets/music/music_files/fireplace_glow.mp3"
+    },
+    {"title": "Forest Dawn", "genre": "Seasonal/ASMR", "image": "assets/music/forest_dawn.png", "url": "assets/music/music_files/forest_dawn.mp3"},
+    {"title": "Mountain Breeze", "genre": "Seasonal/ASMR", "image": "assets/music/mountain_breeze.png", "url": "assets/music/music_files/mountain_breeze.mp3"},
+    {"title": "Thunderstorm Calm", "genre": "Seasonal/ASMR", "image": "assets/music/thunderstorm_calm.png", "url": "assets/music/music_files/thunderstorm_calm.mp3"},
 
     // Calm & Soothing
-    {"title": "Calm Waves", "genre": "Calm & Soothing", "image": "assets/music/calm_waves.png"},
-    {"title": "Gentle Winds", "genre": "Calm & Soothing", "image": "assets/music/gentle_winds.png"},
-    {"title": "Ocean of Peace", "genre": "Calm & Soothing", "image": "assets/music/ocean_of_peace.png"},
-    {"title": "Soft Glow", "genre": "Calm & Soothing", "image": "assets/music/soft_glow.png"},
-    {"title": "Tranquil Paths", "genre": "Calm & Soothing", "image": "assets/music/tranquil_paths.png"},
+    {"title": "Calm Waves", "genre": "Calm & Soothing", "image": "assets/music/calm_waves.png", "url": "assets/music/music_files/calm_waves.mp3"},
+    {"title": "Gentle Winds", "genre": "Calm & Soothing", "image": "assets/music/gentle_winds.png", "url": "assets/music/music_files/gentle_winds.mp3"},
+    {"title": "Ocean of Peace", "genre": "Calm & Soothing", "image": "assets/music/ocean_of_peace.png", "url": "assets/music/music_files/ocean_of_peace.mp3"},
+    {"title": "Soft Glow", "genre": "Calm & Soothing", "image": "assets/music/soft_glow.png", "url": "assets/music/music_files/soft_glow.mp3"},
+    {"title": "Tranquil Paths", "genre": "Calm & Soothing", "image": "assets/music/tranquil_paths.png", "url": "assets/music/music_files/tranquil_paths.mp3"},
 
-    // Youth-Focused
-    {"title": "Electric Sunset", "genre": "Youth-Focused", "image": "assets/music/electric_sunset.png"},
-    {"title": "Feel the Flow", "genre": "Youth-Focused", "image": "assets/music/feel_the_flow.png"},
-    {"title": "Groove Wave", "genre": "Youth-Focused", "image": "assets/music/groove_wave.png"},
-    {"title": "Retro Vibes", "genre": "Youth-Focused", "image": "assets/music/retro_vibes.png"},
-    {"title": "Soulful Symphony", "genre": "Youth-Focused", "image": "assets/music/soulful_symphony.png"},
+    
 
   ];
 
@@ -56,10 +68,25 @@ class _MusicScreenState extends State<MusicScreen> {
       return matchesGenre && matchesSearch;
     }).toList();
   }
-  Future<void> _playMusic(String url) async {
+  Future<void> _playMusic(String title, String url) async {
     try {
-      await _audioPlayer.setAudioSource(AudioSource.uri(Uri.parse(url)));
-      _audioPlayer.play();
+      if (_currentlyPlayingTitle == title && _isPlaying) {
+        // Pause if the same song is playing
+        await _audioPlayer.pause();
+        setState(() {
+          _isPlaying = false;
+        });
+      } else {
+        // Play new song or resume
+        if (_currentlyPlayingTitle != title) {
+          await _audioPlayer.setAsset(url);
+        }
+        await _audioPlayer.play();
+        setState(() {
+          _currentlyPlayingTitle = title;
+          _isPlaying = true;
+        });
+      }
     } catch (e) {
       print("Error playing music: $e");
     }
@@ -152,54 +179,72 @@ class _MusicScreenState extends State<MusicScreen> {
   }
 
   Widget _buildMusicTile(String title, String genre, String imagePath, String duration) {
-    return Card(
-      elevation: 5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(15),
-              topRight: Radius.circular(15),
-            ),
-            child: Image.asset(
-              imagePath,
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: 100, // Adjust height as needed
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    bool isCurrentlyPlaying = _currentlyPlayingTitle == title && _isPlaying;
+    
+    return InkWell(
+      onTap: () {
+        final musicItem = musicList.firstWhere((item) => item['title'] == title);
+        _playMusic(title, musicItem['url']!);
+      },
+      child: Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
+              alignment: Alignment.center,
               children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15),
                   ),
-                  overflow: TextOverflow.ellipsis,
+                  child: Image.asset(
+                    imagePath,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: 100,
+                  ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  genre,
-                  style: TextStyle(color: Colors.grey[600], fontSize: 12),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  duration,
-                  style: const TextStyle(color: Colors.grey, fontSize: 12),
+                Icon(
+                  isCurrentlyPlaying ? Icons.pause_circle : Icons.play_circle,
+                  size: 40,
+                  color: Colors.white,
                 ),
               ],
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    genre,
+                    style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    duration,
+                    style: const TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
