@@ -3,7 +3,7 @@ import 'package:just_audio/just_audio.dart';
 import 'dart:math';
 
 class MusicRecScreen extends StatefulWidget {
-  const MusicRecScreen({Key? key}) : super(key: key);
+  const MusicRecScreen({super.key});
 
   @override
   _MusicRecScreenState createState() => _MusicRecScreenState();

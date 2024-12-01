@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-
+import 'package:just_audio/just_audio.dart';
 import '../../music_rec.dart'; // Import for Timer
 
 class HomeScreen extends StatefulWidget {
@@ -17,6 +17,40 @@ class _HomeScreenState extends State<HomeScreen> {
   int _start = 600; // 10 minutes in seconds
   List<Map<String, String>> recommendedMusic = [];
   String? selectedMood;
+
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  bool _isPlaying = false;
+  String? _currentlyPlayingTitle;
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose(); // Clean up the player when the widget is disposed
+    super.dispose();
+  }
+
+  Future<void> _playMusic(String title, String url) async {
+    try {
+      if (_currentlyPlayingTitle == title && _isPlaying) {
+        // Pause if the same song is playing
+        await _audioPlayer.pause();
+        setState(() {
+          _isPlaying = false;
+        });
+      } else {
+        // Play new song or resume
+        if (_currentlyPlayingTitle != title) {
+          await _audioPlayer.setAsset(url);
+        }
+        await _audioPlayer.play();
+        setState(() {
+          _currentlyPlayingTitle = title; // Update the currently playing title
+          _isPlaying = true;
+        });
+      }
+    } catch (e) {
+      print("Error playing music: $e");
+    }
+  }
 
   Future<void> _logout(BuildContext context) async {
     try {
@@ -50,12 +84,14 @@ class _HomeScreenState extends State<HomeScreen> {
             {
               "title": "Ocean of Peace",
               "genre": "Calm & Soothing",
-              "image": "assets/music/ocean_of_peace.png"
+              "image": "assets/music/ocean_of_peace.png",
+              "url": "assets/music/music_files/ocean_of_peace.mp3" // Added URL
             },
             {
               "title": "Gentle Winds",
               "genre": "Calm & Soothing",
-              "image": "assets/music/gentle_winds.png"
+              "image": "assets/music/gentle_winds.png",
+              "url": "assets/music/music_files/gentle_winds.mp3" // Added URL
             },
           ];
           break;
@@ -64,12 +100,8 @@ class _HomeScreenState extends State<HomeScreen> {
             {
               "title": "Electric Sunset",
               "genre": "Youth-Focused",
-              "image": "assets/music/electric_sunset.png"
-            },
-            {
-              "title": "Urban Melody",
-              "genre": "Youth-Focused",
-              "image": "assets/music/urban_melody.png"
+              "image": "assets/music/electric_sunset.png",
+              "url": "assets/music/music_files/electric_sunset.mp3" // Added URL
             },
           ];
           break;
@@ -78,12 +110,14 @@ class _HomeScreenState extends State<HomeScreen> {
             {
               "title": "Soft Glow",
               "genre": "Calm & Soothing",
-              "image": "assets/music/soft_glow.png"
+              "image": "assets/music/soft_glow.png",
+              "url": "assets/music/music_files/soft_glow.mp3" // Added URL
             },
             {
               "title": "Tranquil Paths",
               "genre": "Calm & Soothing",
-              "image": "assets/music/tranquil_paths.png"
+              "image": "assets/music/tranquil_paths.png",
+              "url": "assets/music/music_files/tranquil_paths.mp3" // Added URL
             },
           ];
           break;
@@ -92,18 +126,22 @@ class _HomeScreenState extends State<HomeScreen> {
             {
               "title": "Birdsong Bliss",
               "genre": "Seasonal/ASMR",
-              "image": "assets/music/birdsong.png"
+              "image": "assets/music/birdsong.png",
+              "url": "assets/music/music_files/birdsong.mp3" // Added URL
             },
             {
               "title": "Forest Dawn",
               "genre": "Seasonal/ASMR",
-              "image": "assets/music/forest_dawn.png"
+              "image": "assets/music/forest_dawn.png",
+              "url": "assets/music/music_files/forest_dawn.mp3" // Added URL
             },
           ];
           break;
       }
     });
   }
+
+
 
   Widget _buildRecommendedSection() {
     if (selectedMood == null) {
@@ -369,10 +407,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-
-
-
-
 // journaling / writing section
   Widget _buildFeelingSection() {
     return Container(
@@ -629,9 +663,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-
-
-Widget _buildJournalSection() {
+  Widget _buildJournalSection() {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -664,11 +696,13 @@ Widget _buildJournalSection() {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: const [
-                        Icon(Icons.question_answer, size: 50, color: Colors.blue),
+                        Icon(Icons.question_answer,
+                            size: 50, color: Colors.blue),
                         SizedBox(height: 10),
                         Text(
                           'Let\'s Do a Q&A',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -695,7 +729,8 @@ Widget _buildJournalSection() {
                         SizedBox(height: 10),
                         Text(
                           'Journal Section',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -708,9 +743,6 @@ Widget _buildJournalSection() {
       ),
     );
   }
-
-
-
 
   Widget _buildBottomNavigationBar() {
     return Container(

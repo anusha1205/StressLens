@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
         '/games': (context) => const GamesScreen(),
         '/flower_bloom': (context) => FlowerBloomScreen(),
         '/chill_farm': (context) => ChillFarmScreen(), // Route to Chill Farm screen
-        '/bubble_pop': (context) => BubbleWrapScreen(),
+        '/bubble_pop': (context) => const BubbleWrapScreen(),
       },
     );
   }

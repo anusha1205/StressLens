@@ -27,18 +27,29 @@ class _MusicScreenState extends State<MusicScreen> {
   }
 
   final List<Map<String, String>> musicList = [
-    // Youth-Focused
-    {"title": "Electric Sunset", "genre": "Youth-Focused", "image": "assets/music/electric_sunset.png", "url": "assets/music/music_files/electric_sunset.mp3"},
-    {"title": "Feel the Flow", "genre": "Youth-Focused", "image": "assets/music/feel_the_flow.png", "url": "assets/music/music_files/feel_the_flow.mp3"},
-    {"title": "Groove Wave", "genre": "Youth-Focused", "image": "assets/music/groove_wave.png", "url": "assets/music/music_files/groove_wave.mp3"},
-    {"title": "Retro Vibes", "genre": "Youth-Focused", "image": "assets/music/retro_vibes.png", "url": "assets/music/music_files/retro_vibes.mp3"},
-    {"title": "Soulful Symphony", "genre": "Youth-Focused", "image": "assets/music/soulful_symphony.png", "url": "assets/music/music_files/soulful_symphony.mp3"},
-    // Seasonal/ASMR
     {
-      "title": "Birdsong Bliss",
+      "title": "Retro Vibes",
+      "genre": "Youth-Focused",
+      "image": "assets/music/retro_vibes.png",
+      "url": "assets/music/music_files/retro_vibes.mp3"
+    },
+    {
+      "title": "Soulful Symphony",
+      "genre": "Youth-Focused",
+      "image": "assets/music/soulful_symphony.png",
+      "url": "assets/music/music_files/soulful_symphony.mp3"
+    },
+    {
+      "title": "Forest Dawn",
       "genre": "Seasonal/ASMR",
-      "image": "assets/music/birdsong.png",
-      "url": "assets/music/music_files/birdsong.mp3"
+      "image": "assets/music/forest_dawn.png",
+      "url": "assets/music/music_files/forest_dawn.mp3"
+    },
+    {
+      "title": "Groove Wave",
+      "genre": "Youth-Focused",
+      "image": "assets/music/groove_wave.png",
+      "url": "assets/music/music_files/groove_wave.mp3"
     },
     {
       "title": "Fireplace Glow",
@@ -46,28 +57,78 @@ class _MusicScreenState extends State<MusicScreen> {
       "image": "assets/music/fireplace_glow.png",
       "url": "assets/music/music_files/fireplace_glow.mp3"
     },
-    {"title": "Forest Dawn", "genre": "Seasonal/ASMR", "image": "assets/music/forest_dawn.png", "url": "assets/music/music_files/forest_dawn.mp3"},
-    {"title": "Mountain Breeze", "genre": "Seasonal/ASMR", "image": "assets/music/mountain_breeze.png", "url": "assets/music/music_files/mountain_breeze.mp3"},
-    {"title": "Thunderstorm Calm", "genre": "Seasonal/ASMR", "image": "assets/music/thunderstorm_calm.png", "url": "assets/music/music_files/thunderstorm_calm.mp3"},
-
-    // Calm & Soothing
-    {"title": "Calm Waves", "genre": "Calm & Soothing", "image": "assets/music/calm_waves.png", "url": "assets/music/music_files/calm_waves.mp3"},
-    {"title": "Gentle Winds", "genre": "Calm & Soothing", "image": "assets/music/gentle_winds.png", "url": "assets/music/music_files/gentle_winds.mp3"},
-    {"title": "Ocean of Peace", "genre": "Calm & Soothing", "image": "assets/music/ocean_of_peace.png", "url": "assets/music/music_files/ocean_of_peace.mp3"},
-    {"title": "Soft Glow", "genre": "Calm & Soothing", "image": "assets/music/soft_glow.png", "url": "assets/music/music_files/soft_glow.mp3"},
-    {"title": "Tranquil Paths", "genre": "Calm & Soothing", "image": "assets/music/tranquil_paths.png", "url": "assets/music/music_files/tranquil_paths.mp3"},
-
-    
-
+    {
+      "title": "Ocean of Peace",
+      "genre": "Calm & Soothing",
+      "image": "assets/music/ocean_of_peace.png",
+      "url": "assets/music/music_files/ocean_of_peace.mp3"
+    },
+    {
+      "title": "Tranquil Paths",
+      "genre": "Calm & Soothing",
+      "image": "assets/music/tranquil_paths.png",
+      "url": "assets/music/music_files/tranquil_paths.mp3"
+    },
+    {
+      "title": "Soft Glow",
+      "genre": "Calm & Soothing",
+      "image": "assets/music/soft_glow.png",
+      "url": "assets/music/music_files/soft_glow.mp3"
+    },
+    {
+      "title": "Electric Sunset",
+      "genre": "Youth-Focused",
+      "image": "assets/music/electric_sunset.png",
+      "url": "assets/music/music_files/electric_sunset.mp3"
+    },
+    {
+      "title": "Gentle Winds",
+      "genre": "Calm & Soothing",
+      "image": "assets/music/gentle_winds.png",
+      "url": "assets/music/music_files/gentle_winds.mp3"
+    },
+    {
+      "title": "Thunderstorm Calm",
+      "genre": "Seasonal/ASMR",
+      "image": "assets/music/thunderstorm_calm.png",
+      "url": "assets/music/music_files/thunderstorm_calm.mp3"
+    },
+    {
+      "title": "Mountain Breeze",
+      "genre": "Seasonal/ASMR",
+      "image": "assets/music/mountain_breeze.png",
+      "url": "assets/music/music_files/mountain_breeze.mp3"
+    },
+    {
+      "title": "Feel the Flow",
+      "genre": "Youth-Focused",
+      "image": "assets/music/feel_the_flow.png",
+      "url": "assets/music/music_files/feel_the_flow.mp3"
+    },
+    {
+      "title": "Calm Waves",
+      "genre": "Calm & Soothing",
+      "image": "assets/music/calm_waves.png",
+      "url": "assets/music/music_files/calm_waves.mp3"
+    },
+    {
+      "title": "Birdsong Bliss",
+      "genre": "Seasonal/ASMR",
+      "image": "assets/music/birdsong.png",
+      "url": "assets/music/music_files/birdsong.mp3"
+    }
   ];
 
   List<Map<String, String>> get filteredMusicList {
     return musicList.where((music) {
-      final matchesGenre = _selectedGenre == 'All' || music['genre'] == _selectedGenre;
-      final matchesSearch = music['title']!.toLowerCase().contains(_searchQuery.toLowerCase());
+      final matchesGenre =
+          _selectedGenre == 'All' || music['genre'] == _selectedGenre;
+      final matchesSearch =
+          music['title']!.toLowerCase().contains(_searchQuery.toLowerCase());
       return matchesGenre && matchesSearch;
     }).toList();
   }
+
   Future<void> _playMusic(String title, String url) async {
     try {
       if (_currentlyPlayingTitle == title && _isPlaying) {
@@ -104,7 +165,8 @@ class _MusicScreenState extends State<MusicScreen> {
         children: [
           // Curved Search Box
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white, // Background color of the search box
@@ -149,7 +211,8 @@ class _MusicScreenState extends State<MusicScreen> {
             onPressed: _showGenreSelectionDialog,
             child: const Text('Select Music Genre'),
             style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white, backgroundColor: const Color(0xFF0B3534), // White text
+              foregroundColor: Colors.white,
+              backgroundColor: const Color(0xFF0B3534), // White text
             ),
           ),
           Expanded(
@@ -178,12 +241,14 @@ class _MusicScreenState extends State<MusicScreen> {
     );
   }
 
-  Widget _buildMusicTile(String title, String genre, String imagePath, String duration) {
+  Widget _buildMusicTile(
+      String title, String genre, String imagePath, String duration) {
     bool isCurrentlyPlaying = _currentlyPlayingTitle == title && _isPlaying;
-    
+
     return InkWell(
       onTap: () {
-        final musicItem = musicList.firstWhere((item) => item['title'] == title);
+        final musicItem =
+            musicList.firstWhere((item) => item['title'] == title);
         _playMusic(title, musicItem['url']!);
       },
       child: Card(
