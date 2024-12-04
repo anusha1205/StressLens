@@ -2,7 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:just_audio/just_audio.dart';
-import '../../music_rec.dart'; // Import for Timer
+import '../../backend/permissions.dart';
+import 'package:fl_chart/fl_chart.dart';
+
+// Import for Timer
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,6 +24,23 @@ class _HomeScreenState extends State<HomeScreen> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool _isPlaying = false;
   String? _currentlyPlayingTitle;
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkHealthConnectPermissions();
+    });
+  }
+
+  Future<void> _checkHealthConnectPermissions() async {
+    // await Navigator.push(
+    // context,
+    // MaterialPageRoute(
+    // builder: (context) => const HealthConnectPermissionChecker(),
+    // ),
+    // );
+  }
 
   @override
   void dispose() {
@@ -141,8 +161,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-
-
   Widget _buildRecommendedSection() {
     if (selectedMood == null) {
       return Container(); // Return empty container if no mood selected
@@ -243,8 +261,8 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: BorderSide(
-            color: const Color(0xFF0B3534),
+          side: const BorderSide(
+            color: Color(0xFF0B3534),
             width: 1,
           ),
         ),
@@ -345,14 +363,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-// Stress level graph placeholder (image from assets)
   Widget _buildStressLevelSection() {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        color: Color(0xFFDAFBFF), // Light background color
+        color: const Color(0xFFDAFBFF),
         borderRadius: BorderRadius.circular(18),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black12,
             blurRadius: 5,
@@ -364,19 +381,19 @@ class _HomeScreenState extends State<HomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Stress Level Graph',
+            'Daily Stress Levels',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
           Container(
             alignment: Alignment.center,
             child: Container(
-              height: 213, // Height for the graph
+              height: 250,
               width: 500,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black12,
                     blurRadius: 5,
@@ -384,23 +401,119 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-              child: Image.asset(
-                'assets/stress_graph/stress_graph_image.png',
-                // Replace with the actual image path
-                fit: BoxFit.cover,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: LineChart(
+                  LineChartData(
+                    gridData: FlGridData(
+                      show: true,
+                      drawVerticalLine: true,
+                      horizontalInterval: 20,
+                      verticalInterval: 1,
+                    ),
+                    titlesData: FlTitlesData(
+                      leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 40,
+                          getTitlesWidget: (value, meta) => Text(
+                            value.toInt().toString(),
+                            style: const TextStyle(
+                              color: Colors.black54,
+                              fontSize: 10,
+                            ),
+                          ),
+                          interval: 20,
+                        ),
+                      ),
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          getTitlesWidget: (value, meta) {
+                            final days = [
+                              'Mon',
+                              'Tue',
+                              'Wed',
+                              'Thu',
+                              'Fri',
+                              'Sat',
+                              'Sun'
+                            ];
+                            return Text(
+                              value.toInt() < days.length
+                                  ? days[value.toInt()]
+                                  : '',
+                              style: const TextStyle(
+                                color: Colors.black54,
+                                fontSize: 10,
+                              ),
+                            );
+                          },
+                          interval: 1,
+                        ),
+                      ),
+                      rightTitles:
+                          AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      topTitles:
+                          AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    ),
+                    borderData: FlBorderData(
+                      show: true,
+                      border: Border.all(color: Colors.black12, width: 1),
+                    ),
+                    minX: 0,
+                    maxX: 6,
+                    minY: 0,
+                    maxY: 100,
+                    lineBarsData: [
+                      LineChartBarData(
+                        spots: [
+                          FlSpot(0, 45), // Monday
+                          FlSpot(1, 70), // Tuesday
+                          FlSpot(2, 55), // Wednesday
+                          FlSpot(3, 80), // Thursday
+                          FlSpot(4, 65), // Friday
+                          FlSpot(5, 40), // Saturday
+                          FlSpot(6, 30), // Sunday
+                        ],
+                        isCurved: true,
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.blue.shade300,
+                            Colors.blue.shade700,
+                          ],
+                        ),
+                        barWidth: 4,
+                        belowBarData: BarAreaData(
+                          show: true,
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.blue.shade100.withOpacity(0.4),
+                              Colors.blue.shade300.withOpacity(0.4),
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
+                        ),
+                        dotData: FlDotData(show: true),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
           const SizedBox(height: 10),
           ElevatedButton(
             onPressed: () {
-              // Add analyze logic
+              // Navigate to the /analysis route
+              Navigator.pushNamed(context, '/analysis');
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.black, // Dark color
-              foregroundColor: Colors.white, // White text
+              backgroundColor: Colors.black,
+              foregroundColor: Colors.white,
             ),
-            child: const Text('Analyze'),
+            child: const Text('Detailed Analysis'),
           ),
         ],
       ),
@@ -440,9 +553,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(12.0),
                       border: Border.all(color: Colors.blueAccent, width: 2),
                     ),
-                    child: Column(
+                    child: const Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
+                      children: [
                         Icon(Icons.question_answer,
                             size: 50, color: Colors.blue),
                         SizedBox(height: 10),
@@ -470,9 +583,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(12.0),
                       border: Border.all(color: Colors.greenAccent, width: 2),
                     ),
-                    child: Column(
+                    child: const Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
+                      children: [
                         Icon(Icons.edit_note, size: 50, color: Colors.green),
                         SizedBox(height: 10),
                         Text(
@@ -519,7 +632,7 @@ class _HomeScreenState extends State<HomeScreen> {
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1), // Shadow color
-            offset: Offset(4, 4), // Offset of the shadow
+            offset: const Offset(4, 4), // Offset of the shadow
             blurRadius: 8, // Blur radius of the shadow
             spreadRadius: 1, // Spread radius of the shadow
           ),
@@ -648,7 +761,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Column(
             children: recommendedSongs.map((song) {
               return ListTile(
-                leading: Icon(Icons.music_note, color: Colors.teal),
+                leading: const Icon(Icons.music_note, color: Colors.teal),
                 // Icon or thumbnail
                 title: Text(song['title']!),
                 subtitle: Text(song['artist']!),
@@ -693,9 +806,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(12.0),
                       border: Border.all(color: Colors.blueAccent, width: 2),
                     ),
-                    child: Column(
+                    child: const Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
+                      children: [
                         Icon(Icons.question_answer,
                             size: 50, color: Colors.blue),
                         SizedBox(height: 10),
@@ -722,9 +835,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(12.0),
                       border: Border.all(color: Colors.greenAccent, width: 2),
                     ),
-                    child: Column(
+                    child: const Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
+                      children: [
                         Icon(Icons.edit_note, size: 50, color: Colors.green),
                         SizedBox(height: 10),
                         Text(
@@ -745,7 +858,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildBottomNavigationBar() {
-    return Container(
+    return SizedBox(
       height: 90, // Set your desired height here
       child: BottomNavigationBar(
         backgroundColor: const Color(0xFF0B3534),
@@ -770,6 +883,9 @@ class _HomeScreenState extends State<HomeScreen> {
             case 4:
               Navigator.pushNamed(context, '/profile');
               break;
+            case 5:
+              Navigator.pushNamed(context, '/demo');
+              break;
           }
         },
         type: BottomNavigationBarType.fixed,
@@ -793,6 +909,10 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
             label: 'Profile',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'demo',
           ),
         ],
         selectedItemColor: Colors.white,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({Key? key}) : super(key: key);
+  const EditProfileScreen({super.key});
 
   @override
   _EditProfileScreenState createState() => _EditProfileScreenState();
@@ -30,7 +30,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final TextEditingController bloodPressureController = TextEditingController();
   final TextEditingController pulseController = TextEditingController();
   final TextEditingController hrvController = TextEditingController();
-  final TextEditingController respirationRateController = TextEditingController();
+  final TextEditingController respirationRateController =
+      TextEditingController();
   final TextEditingController temperatureController = TextEditingController();
   final TextEditingController muscleTensionController = TextEditingController();
   final TextEditingController sleepQualityController = TextEditingController();
@@ -65,22 +66,30 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Personal Details Section
-            const Text('Personal Details', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+            const Text('Personal Details',
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
             _buildEditableRow('Name', nameController, _saveName),
             _buildEditableRow('Age', ageController, _saveAge),
             _buildEditableRow('Gender', genderController, _saveGender),
 
             const SizedBox(height: 20),
             // Medical Details Section
-            const Text('Medical Details', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-            _buildEditableRow('Blood Pressure (mmHg)', bloodPressureController, _saveBloodPressure),
+            const Text('Medical Details',
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+            _buildEditableRow('Blood Pressure (mmHg)', bloodPressureController,
+                _saveBloodPressure),
             _buildEditableRow('Pulse (bpm)', pulseController, _savePulse),
             _buildEditableRow('HRV (ms)', hrvController, _saveHRV),
-            _buildEditableRow('Respiration Rate (breaths/min)', respirationRateController, _saveRespirationRate),
-            _buildEditableRow('Body Temperature (°C)', temperatureController, _saveTemperature),
-            _buildEditableRow('Muscle Tension (High / Low)', muscleTensionController, _saveMuscleTension),
-            _buildEditableRow('Sleep Quality (Good / Moderate / Bad)', sleepQualityController, _saveSleepQuality),
-            _buildEditableRow('Mood (Happy / Moderate / Sad)', moodController, _saveMood),
+            _buildEditableRow('Respiration Rate (breaths/min)',
+                respirationRateController, _saveRespirationRate),
+            _buildEditableRow('Body Temperature (°C)', temperatureController,
+                _saveTemperature),
+            _buildEditableRow('Muscle Tension (High / Low)',
+                muscleTensionController, _saveMuscleTension),
+            _buildEditableRow('Sleep Quality (Good / Moderate / Bad)',
+                sleepQualityController, _saveSleepQuality),
+            _buildEditableRow(
+                'Mood (Happy / Moderate / Sad)', moodController, _saveMood),
 
             const SizedBox(height: 20),
             _buildUploadSection(),
@@ -92,7 +101,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   // Helper method for displaying editable rows
-  Widget _buildEditableRow(String label, TextEditingController controller, VoidCallback onSave) {
+  Widget _buildEditableRow(
+      String label, TextEditingController controller, VoidCallback onSave) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
@@ -106,7 +116,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 width: 200,
                 child: TextField(
                   controller: controller,
-                  decoration: InputDecoration(border: OutlineInputBorder()),
+                  decoration:
+                      const InputDecoration(border: OutlineInputBorder()),
                 ),
               ),
             ],
@@ -125,7 +136,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Upload Medical Report', style: TextStyle(fontWeight: FontWeight.bold)),
+        const Text('Upload Medical Report',
+            style: TextStyle(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
         ElevatedButton.icon(
           icon: const Icon(Icons.upload_file),
@@ -151,7 +163,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   void _saveAge() {
     setState(() {
-      age = int.tryParse(ageController.text) ?? age; // fallback to previous value if parsing fails
+      age = int.tryParse(ageController.text) ??
+          age; // fallback to previous value if parsing fails
     });
     print('Age saved: $age');
   }
@@ -232,7 +245,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   // Build bottom navigation bar
   Widget _buildBottomNavigationBar() {
-    return Container(
+    return SizedBox(
       height: 90, // Set your desired height here
       child: BottomNavigationBar(
         backgroundColor: const Color(0xFF0B3534),

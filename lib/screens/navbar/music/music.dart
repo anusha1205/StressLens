@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
 class MusicScreen extends StatefulWidget {
-  const MusicScreen({Key? key}) : super(key: key);
+  const MusicScreen({super.key});
 
   @override
   _MusicScreenState createState() => _MusicScreenState();
@@ -171,7 +171,7 @@ class _MusicScreenState extends State<MusicScreen> {
               decoration: BoxDecoration(
                 color: Colors.white, // Background color of the search box
                 borderRadius: BorderRadius.circular(30.0), // Curve the corners
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black26,
                     blurRadius: 5.0,
@@ -209,11 +209,11 @@ class _MusicScreenState extends State<MusicScreen> {
           ),
           ElevatedButton(
             onPressed: _showGenreSelectionDialog,
-            child: const Text('Select Music Genre'),
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
               backgroundColor: const Color(0xFF0B3534), // White text
             ),
+            child: const Text('Select Music Genre'),
           ),
           Expanded(
             child: GridView.builder(
@@ -341,15 +341,13 @@ class _MusicScreenState extends State<MusicScreen> {
       },
     );
 
-    if (selectedGenre != null) {
-      setState(() {
-        _selectedGenre = selectedGenre;
-      });
-    }
+    setState(() {
+      _selectedGenre = selectedGenre!;
+    });
   }
 
   Widget _buildBottomNavigationBar() {
-    return Container(
+    return SizedBox(
       height: 90,
       child: BottomNavigationBar(
         backgroundColor: const Color(0xFF0B3534),

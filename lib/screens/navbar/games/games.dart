@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class GamesScreen extends StatefulWidget {
-  const GamesScreen({Key? key}) : super(key: key);
+  const GamesScreen({super.key});
 
   @override
   _GamesScreenState createState() => _GamesScreenState();
@@ -12,7 +12,7 @@ class _GamesScreenState extends State<GamesScreen> {
 
   // Reuse the BottomNavigationBar
   Widget _buildBottomNavigationBar() {
-    return Container(
+    return SizedBox(
       height: 90,
       child: BottomNavigationBar(
         backgroundColor: const Color(0xFF0B3534), // Dark green background
@@ -81,16 +81,21 @@ class _GamesScreenState extends State<GamesScreen> {
       backgroundColor: const Color(0xFFF3FFFF), // Light background color
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Center( // Center the column
-          child: SingleChildScrollView( // Enable scrolling
+        child: Center(
+          // Center the column
+          child: SingleChildScrollView(
+            // Enable scrolling
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center, // Center vertically
               children: [
-                _buildGameCard('Flower Bloom', 'assets/games/flower_bloom.png', '/flower_bloom'),
+                _buildGameCard('Flower Bloom', 'assets/games/flower_bloom.png',
+                    '/flower_bloom'),
                 const SizedBox(height: 32), // Space between cards
-                _buildGameCard('Chill Farm', 'assets/games/chill_farm.png', '/chill_farm'),
+                _buildGameCard(
+                    'Chill Farm', 'assets/games/chill_farm.png', '/chill_farm'),
                 const SizedBox(height: 32),
-                _buildGameCard('Bubble Pop', 'assets/games/bubble_pop.png', '/bubble_pop')
+                _buildGameCard(
+                    'Bubble Pop', 'assets/games/bubble_pop.png', '/bubble_pop')
               ],
             ),
           ),
@@ -104,7 +109,7 @@ class _GamesScreenState extends State<GamesScreen> {
     return SizedBox(
       width: 280, // Increased width for the game cards
       child: Card(
-        color: Color(0xFF0B3534), // Dark card background
+        color: const Color(0xFF0B3534), // Dark card background
         child: InkWell(
           onTap: () {
             Navigator.pushNamed(context, route);
@@ -114,7 +119,8 @@ class _GamesScreenState extends State<GamesScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center, // Center vertically
               children: [
-                Image.asset(imagePath, width: 150, height: 150), // Centered image
+                Image.asset(imagePath,
+                    width: 150, height: 150), // Centered image
                 const SizedBox(height: 8), // Space between image and text
                 Text(
                   title,

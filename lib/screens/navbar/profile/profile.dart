@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'editprofile.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -12,6 +12,8 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   int _currentIndex = 4; // Default to profile being selected
   String? userEmail;
+  final String userName = "Admin";
+  final String profileImagePath = 'assets/user_image.png';
 
   @override
   void initState() {
@@ -29,82 +31,97 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> _logout(BuildContext context) async {
     try {
       await FirebaseAuth.instance.signOut();
-      print('User logged out successfully');
-
-      // Clear stored credentials
-      await _clearStoredCredentials();
-
-      // Navigate to the login screen after logout
       Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
     } catch (e) {
-      print('Error during logout: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Failed to log out. Please try again.')),
       );
     }
   }
 
-  Future<void> _clearStoredCredentials() async {
-    // Implement secure storage to clear the stored email and password
-    print('Clearing stored credentials');
-  }
-
-  // BottomNavigationBar
-  Widget _buildBottomNavigationBar() {
-    return Container(
-      height: 90, // Set your desired height here
-      child: BottomNavigationBar(
-        backgroundColor: const Color(0xFF0B3534), // Dark green background
-        currentIndex: _currentIndex,
-        onTap: (int index) {
-          setState(() {
-            _currentIndex = index;
-          });
-          // Navigate to different screens based on index
-          switch (_currentIndex) {
-            case 0:
-              Navigator.pushNamed(context, '/chatbot');
-              break;
-            case 1:
-              Navigator.pushNamed(context, '/music');
-              break;
-            case 2:
-              Navigator.pushNamed(context, '/home');
-              break;
-            case 3:
-              Navigator.pushNamed(context, '/games');
-              break;
-            case 4:
-              break; // Stay on profile
-          }
-        },
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble_outline),
-            label: 'ChatBot',
+  Widget _buildProfileHeader() {
+    return Center(
+      child: Column(
+        children: [
+          Stack(
+            children: [
+              CircleAvatar(
+                radius: 75,
+                backgroundImage: AssetImage(profileImagePath),
+              ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: IconButton(
+                  icon: const Icon(Icons.camera_alt, color: Colors.white),
+                  onPressed: () {
+                    // Add functionality to upload/edit profile picture
+                  },
+                  color: const Color(0xFF0B3534),
+                  iconSize: 30,
+                ),
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.music_note),
-            label: 'Music',
+          const SizedBox(height: 16),
+          Text(
+            'Hello, $userName',
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.games_outlined),
-            label: 'Games',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: 'Profile',
+          const SizedBox(height: 8),
+          Text(
+            userEmail ?? 'Loading...',
+            style: const TextStyle(color: Colors.grey, fontSize: 16),
           ),
         ],
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.green[300],
-        selectedLabelStyle: TextStyle(color: Colors.green[300]),
-        unselectedLabelStyle: TextStyle(color: Colors.green[300]),
+      ),
+    );
+  }
+
+  Widget _buildInfoCards() {
+    return Column(
+      children: [
+        _buildCard(
+          title: 'Daily Stress Tracker',
+          value: '5 Days Streak',
+          icon: Icons.stacked_bar_chart,
+          color: Colors.green,
+        ),
+        _buildCard(
+          title: 'Meditation Sessions',
+          value: '10 Sessions Completed',
+          icon: Icons.self_improvement,
+          color: Colors.blue,
+        ),
+        _buildCard(
+          title: 'Preferred Activities',
+          value: 'Yoga, Music, Walks',
+          icon: Icons.favorite,
+          color: Colors.pink,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCard(
+      {required String title,
+      required String value,
+      required IconData icon,
+      required Color color}) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      elevation: 4,
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: color.withOpacity(0.2),
+          child: Icon(icon, color: color),
+        ),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Text(value),
       ),
     );
   }
@@ -114,86 +131,86 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
-        backgroundColor: const Color(0xFF0B3534), // Dark green AppBar
+        backgroundColor: const Color(0xFF0B3534),
       ),
-      backgroundColor: const Color(0xFFF3FFFF), // Light background color
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Center(
-              child: CircleAvatar(
-                radius: 75,
-                backgroundImage: AssetImage('assets/user_image.png'), // Add a default image
+            _buildProfileHeader(),
+            const SizedBox(height: 24),
+            _buildInfoCards(),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const EditProfileScreen()),
               ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF0B3534),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+              ),
+              child: const Text('Edit Profile',
+                  style: TextStyle(color: Colors.white)),
             ),
             const SizedBox(height: 16),
-            const Center(
-              child: Text(
-                'Name: Admin',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black),
+            ElevatedButton(
+              onPressed: () => _logout(context),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
               ),
-            ),
-            const SizedBox(height: 25),
-            _buildInfoTile('Email', userEmail ?? 'Loading...'), // Display email
-            _buildInfoTile('Phone', '+1 234 567 8900'),
-            _buildInfoTile('Location', 'Mumbai, India'),
-            const SizedBox(height: 24),
-
-            // Row for Edit Profile and Logout buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => EditProfileScreen()),
-                      );
-                    },
-                    child: const Text('Edit Profile'),
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white, // Change text color to white
-                      backgroundColor: Color(0xFF0B3534), // Dark background color
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16), // Space between buttons
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => _logout(context),
-                    child: const Text('Logout'),
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white, // Change text color to white
-                      backgroundColor: Color(0xFF0B3534), // Dark background color
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                    ),
-                  ),
-                ),
-              ],
+              child:
+                  const Text('Logout', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(), // Add BottomNavigationBar here
+      bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
-  Widget _buildInfoTile(String title, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: TextStyle(color: Colors.black.withOpacity(0.7))),
-          const SizedBox(height: 4),
-          Text(value, style: const TextStyle(color: Colors.black, fontSize: 16)),
-          const Divider(color: Colors.black),
-        ],
-      ),
+  Widget _buildBottomNavigationBar() {
+    return BottomNavigationBar(
+      currentIndex: _currentIndex,
+      onTap: (int index) {
+        setState(() {
+          _currentIndex = index;
+        });
+        switch (index) {
+          case 0:
+            Navigator.pushNamed(context, '/chatbot');
+            break;
+          case 1:
+            Navigator.pushNamed(context, '/music');
+            break;
+          case 2:
+            Navigator.pushNamed(context, '/home');
+            break;
+          case 3:
+            Navigator.pushNamed(context, '/games');
+            break;
+          case 4:
+            break; // Stay on profile
+        }
+      },
+      type: BottomNavigationBarType.fixed,
+      items: const [
+        BottomNavigationBarItem(
+            icon: Icon(Icons.chat_bubble_outline), label: 'ChatBot'),
+        BottomNavigationBarItem(icon: Icon(Icons.music_note), label: 'Music'),
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.games_outlined), label: 'Games'),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline), label: 'Profile'),
+      ],
+      selectedItemColor: Colors.white,
+      unselectedItemColor: Colors.green[300],
+      backgroundColor: const Color(0xFF0B3534),
     );
   }
 }

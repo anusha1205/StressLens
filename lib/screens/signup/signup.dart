@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../login/login.dart'; // Import your login screen
 
 class SignupScreen extends StatefulWidget {
-  const SignupScreen({Key? key}) : super(key: key);
+  const SignupScreen({super.key});
 
   @override
   State<SignupScreen> createState() => _SignupScreenState();
@@ -21,7 +21,8 @@ class _SignupScreenState extends State<SignupScreen> {
   Future<void> _signUp() async {
     if (_formKey.currentState!.validate()) {
       try {
-        UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        UserCredential userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _emailController.text.trim(),
           password: _passwordController.text,
         );
@@ -68,7 +69,6 @@ class _SignupScreenState extends State<SignupScreen> {
                 },
               ),
               const SizedBox(height: 20),
-
               TextFormField(
                 controller: _fullNameController,
                 decoration: const InputDecoration(
@@ -83,7 +83,6 @@ class _SignupScreenState extends State<SignupScreen> {
                 },
               ),
               const SizedBox(height: 20),
-
               TextFormField(
                 controller: _usernameController,
                 decoration: const InputDecoration(
@@ -98,7 +97,6 @@ class _SignupScreenState extends State<SignupScreen> {
                 },
               ),
               const SizedBox(height: 20),
-
               TextFormField(
                 controller: _passwordController,
                 obscureText: !_isPasswordVisible,
@@ -107,7 +105,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   border: const OutlineInputBorder(),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                      _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
                     ),
                     onPressed: () {
                       setState(() {
@@ -127,7 +127,6 @@ class _SignupScreenState extends State<SignupScreen> {
                 },
               ),
               const SizedBox(height: 20),
-
               TextFormField(
                 controller: _confirmPasswordController,
                 obscureText: !_isPasswordVisible,
@@ -136,7 +135,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   border: const OutlineInputBorder(),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                      _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
                     ),
                     onPressed: () {
                       setState(() {
@@ -153,13 +154,14 @@ class _SignupScreenState extends State<SignupScreen> {
                 },
               ),
               const SizedBox(height: 20),
-
               SizedBox(
-                width: MediaQuery.of(context).size.width / 2, // Half the screen width
+                width: MediaQuery.of(context).size.width /
+                    2, // Half the screen width
                 child: ElevatedButton(
                   onPressed: _signUp,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF0B3534), // Dark green button
+                    backgroundColor:
+                        const Color(0xFF0B3534), // Dark green button
                     padding: const EdgeInsets.symmetric(vertical: 15),
                   ),
                   child: const Center(
@@ -171,7 +173,6 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

@@ -24,11 +24,32 @@ class _MusicRecScreenState extends State<MusicRecScreen> {
   void _selectRandomInitialSongs() {
     List<Map<String, String>> allMusic = [
       // Your existing music list
-      {"title": "Birdsong Bliss", "genre": "Seasonal/ASMR", "image": "assets/music/birdsong.png", "url": "https://example.com/birdsong.mp3"},
-      {"title": "Forest Dawn", "genre": "Seasonal/ASMR", "image": "assets/music/forest_dawn.png"},
-      {"title": "Calm Waves", "genre": "Calm & Soothing", "image": "assets/music/calm_waves.png"},
-      {"title": "Ocean of Peace", "genre": "Calm & Soothing", "image": "assets/music/ocean_of_peace.png"},
-      {"title": "Electric Sunset", "genre": "Youth-Focused", "image": "assets/music/electric_sunset.png"},
+      {
+        "title": "Birdsong Bliss",
+        "genre": "Seasonal/ASMR",
+        "image": "assets/music/birdsong.png",
+        "url": "https://example.com/birdsong.mp3"
+      },
+      {
+        "title": "Forest Dawn",
+        "genre": "Seasonal/ASMR",
+        "image": "assets/music/forest_dawn.png"
+      },
+      {
+        "title": "Calm Waves",
+        "genre": "Calm & Soothing",
+        "image": "assets/music/calm_waves.png"
+      },
+      {
+        "title": "Ocean of Peace",
+        "genre": "Calm & Soothing",
+        "image": "assets/music/ocean_of_peace.png"
+      },
+      {
+        "title": "Electric Sunset",
+        "genre": "Youth-Focused",
+        "image": "assets/music/electric_sunset.png"
+      },
       // Add more songs as needed
     ];
 
@@ -44,27 +65,55 @@ class _MusicRecScreenState extends State<MusicRecScreen> {
   void recommendMusic(String mood) {
     List<Map<String, String>> allMusic = [
       // The same music list used above
-      {"title": "Birdsong Bliss", "genre": "Seasonal/ASMR", "image": "assets/music/birdsong.png", "url": "https://example.com/birdsong.mp3"},
-      {"title": "Forest Dawn", "genre": "Seasonal/ASMR", "image": "assets/music/forest_dawn.png"},
-      {"title": "Calm Waves", "genre": "Calm & Soothing", "image": "assets/music/calm_waves.png"},
-      {"title": "Ocean of Peace", "genre": "Calm & Soothing", "image": "assets/music/ocean_of_peace.png"},
-      {"title": "Electric Sunset", "genre": "Youth-Focused", "image": "assets/music/electric_sunset.png"},
+      {
+        "title": "Birdsong Bliss",
+        "genre": "Seasonal/ASMR",
+        "image": "assets/music/birdsong.png",
+        "url": "https://example.com/birdsong.mp3"
+      },
+      {
+        "title": "Forest Dawn",
+        "genre": "Seasonal/ASMR",
+        "image": "assets/music/forest_dawn.png"
+      },
+      {
+        "title": "Calm Waves",
+        "genre": "Calm & Soothing",
+        "image": "assets/music/calm_waves.png"
+      },
+      {
+        "title": "Ocean of Peace",
+        "genre": "Calm & Soothing",
+        "image": "assets/music/ocean_of_peace.png"
+      },
+      {
+        "title": "Electric Sunset",
+        "genre": "Youth-Focused",
+        "image": "assets/music/electric_sunset.png"
+      },
       // Add more songs as needed
     ];
 
     setState(() {
-      recommendedMusic = allMusic.where((music) {
-        if (mood == "Relax") {
-          return music['genre'] == 'Seasonal/ASMR' || music['genre'] == 'Calm & Soothing';
-        } else if (mood == "Focus") {
-          return music['genre'] == 'Youth-Focused'; // Focus on energetic music
-        } else if (mood == "Calm") {
-          return music['genre'] == 'Calm & Soothing';
-        } else if (mood == "Anxious") {
-          return music['genre'] == 'Seasonal/ASMR'; // Gentle music to calm anxiety
-        }
-        return false;
-      }).toList().take(2).toList(); // Display at most 2 recommended songs
+      recommendedMusic = allMusic
+          .where((music) {
+            if (mood == "Relax") {
+              return music['genre'] == 'Seasonal/ASMR' ||
+                  music['genre'] == 'Calm & Soothing';
+            } else if (mood == "Focus") {
+              return music['genre'] ==
+                  'Youth-Focused'; // Focus on energetic music
+            } else if (mood == "Calm") {
+              return music['genre'] == 'Calm & Soothing';
+            } else if (mood == "Anxious") {
+              return music['genre'] ==
+                  'Seasonal/ASMR'; // Gentle music to calm anxiety
+            }
+            return false;
+          })
+          .toList()
+          .take(2)
+          .toList(); // Display at most 2 recommended songs
     });
   }
 
@@ -84,8 +133,8 @@ class _MusicRecScreenState extends State<MusicRecScreen> {
       backgroundColor: const Color(0xFFD1FFFF),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
+          const Padding(
+            padding: EdgeInsets.all(16.0),
             child: Text(
               'Please select your mood:',
               style: TextStyle(fontSize: 20),
@@ -127,11 +176,11 @@ class _MusicRecScreenState extends State<MusicRecScreen> {
   Widget _buildMoodButton(String mood) {
     return ElevatedButton(
       onPressed: () => recommendMusic(mood),
-      child: Text(mood),
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFF0B3534),
         foregroundColor: Colors.white,
       ),
+      child: Text(mood),
     );
   }
 

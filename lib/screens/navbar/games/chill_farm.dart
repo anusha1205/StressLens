@@ -2,24 +2,27 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 class ChillFarmScreen extends StatefulWidget {
+  const ChillFarmScreen({super.key});
+
   @override
   _ChillFarmScreenState createState() => _ChillFarmScreenState();
 }
 
-class _ChillFarmScreenState extends State<ChillFarmScreen> with SingleTickerProviderStateMixin {
+class _ChillFarmScreenState extends State<ChillFarmScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _growthAnimation;
   int _growthStage = 0;
   int _harvestedCount = 0;
-  List<String> _harvestedPlants = []; // List to track harvested plants
+  final List<String> _harvestedPlants = []; // List to track harvested plants
 
   Timer? _growthTimer;
   int _remainingTime = 15; // Initial countdown time in seconds
 
   final List<String> _growthStages = [
-    'assets/games/seed.jpg',         // Seed image
-    'assets/games/sprout.png',       // Sprout image
-    'assets/games/full_plant.jpg',   // Full-grown plant image
+    'assets/games/seed.jpg', // Seed image
+    'assets/games/sprout.png', // Sprout image
+    'assets/games/full_plant.jpg', // Full-grown plant image
   ];
 
   @override
@@ -28,7 +31,7 @@ class _ChillFarmScreenState extends State<ChillFarmScreen> with SingleTickerProv
 
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 3),
+      duration: const Duration(seconds: 3),
     );
 
     _growthAnimation = Tween<double>(begin: 0.8, end: 1.2).animate(
@@ -53,7 +56,7 @@ class _ChillFarmScreenState extends State<ChillFarmScreen> with SingleTickerProv
       });
 
       _growthTimer?.cancel(); // Cancel any existing timer
-      _growthTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      _growthTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
         if (_remainingTime > 0) {
           setState(() {
             _remainingTime--;
@@ -106,10 +109,10 @@ class _ChillFarmScreenState extends State<ChillFarmScreen> with SingleTickerProv
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chill Farm'),
-        backgroundColor: Color(0xFF0B3534),
+        title: const Text('Chill Farm'),
+        backgroundColor: const Color(0xFF0B3534),
       ),
-      backgroundColor: Color(0xFFF3FFFF),
+      backgroundColor: const Color(0xFFF3FFFF),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -119,7 +122,7 @@ class _ChillFarmScreenState extends State<ChillFarmScreen> with SingleTickerProv
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
                 _harvestedPlants.length,
-                    (index) => Padding(
+                (index) => Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Image.asset(
                     _harvestedPlants[index],
@@ -149,8 +152,8 @@ class _ChillFarmScreenState extends State<ChillFarmScreen> with SingleTickerProv
               _growthStage == 0
                   ? "Plant a Seed"
                   : _growthStage == _growthStages.length - 1
-                  ? "Harvest Your Plant!"
-                  : "Growing... $_remainingTime seconds left",
+                      ? "Harvest Your Plant!"
+                      : "Growing... $_remainingTime seconds left",
               style: TextStyle(fontSize: 24, color: Colors.teal.shade900),
             ),
             const SizedBox(height: 40),
@@ -159,19 +162,23 @@ class _ChillFarmScreenState extends State<ChillFarmScreen> with SingleTickerProv
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: _growthStage < _growthStages.length - 1 ? _growPlant : null,
-                  child: Text('Water Plant'),
+                  onPressed: _growthStage < _growthStages.length - 1
+                      ? _growPlant
+                      : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                   ),
+                  child: Text('Water Plant'),
                 ),
                 const SizedBox(width: 20),
                 ElevatedButton(
-                  onPressed: _growthStage == _growthStages.length - 1 ? _harvestPlant : null,
-                  child: Text('Harvest'),
+                  onPressed: _growthStage == _growthStages.length - 1
+                      ? _harvestPlant
+                      : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.brown,
                   ),
+                  child: Text('Harvest'),
                 ),
               ],
             ),

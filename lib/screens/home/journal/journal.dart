@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class JournalPage extends StatefulWidget {
+  const JournalPage({super.key});
+
   @override
   _JournalPageState createState() => _JournalPageState();
 }
@@ -35,7 +37,7 @@ class _JournalPageState extends State<JournalPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Journal Page')),
+      appBar: AppBar(title: const Text('Journal Page')),
       body: Column(
         children: [
           // Calendar Widget
@@ -47,10 +49,11 @@ class _JournalPageState extends State<JournalPage> {
             onDaySelected: (selectedDay, focusedDay) {
               setState(() {
                 _selectedDay = selectedDay;
-                _selectedEntry = _journalEntries[selectedDay] ?? ''; // Load entry for the selected day
+                _selectedEntry = _journalEntries[selectedDay] ??
+                    ''; // Load entry for the selected day
               });
             },
-            calendarStyle: CalendarStyle(
+            calendarStyle: const CalendarStyle(
               selectedDecoration: BoxDecoration(
                 color: Colors.blueAccent,
                 shape: BoxShape.circle,
@@ -66,7 +69,7 @@ class _JournalPageState extends State<JournalPage> {
             padding: const EdgeInsets.all(16.0),
             child: TextField(
               maxLines: 5,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Write your journal entry...',
                 border: OutlineInputBorder(),
               ),
@@ -78,7 +81,7 @@ class _JournalPageState extends State<JournalPage> {
           ),
           ElevatedButton(
             onPressed: _updateEntry,
-            child: Text('Save Entry'),
+            child: const Text('Save Entry'),
           ),
           // Display all journal entries
           Expanded(
@@ -87,7 +90,7 @@ class _JournalPageState extends State<JournalPage> {
                 return ListTile(
                   title: Text(
                     '${entry.key.toLocal()}'.split(' ')[0], // Display only date
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(entry.value),
                 );

@@ -1,11 +1,10 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/services.dart';
 
 class BubbleWrapScreen extends StatefulWidget {
-  const BubbleWrapScreen({Key? key}) : super(key: key);
+  const BubbleWrapScreen({super.key});
 
   @override
   _BubbleWrapScreenState createState() => _BubbleWrapScreenState();
@@ -20,7 +19,8 @@ class _BubbleWrapScreenState extends State<BubbleWrapScreen> {
   @override
   void initState() {
     super.initState();
-    _confettiController = ConfettiController(duration: const Duration(milliseconds: 300));
+    _confettiController =
+        ConfettiController(duration: const Duration(milliseconds: 300));
     _bubbles = [];
   }
 
@@ -40,9 +40,10 @@ class _BubbleWrapScreenState extends State<BubbleWrapScreen> {
   List<Bubble> _createBubbles() {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    final bubbleSize = 50.0; // Fixed bubble size for consistency
-    final bubbleSpacing = 22.0; // Space between bubbles
-    final bubblesPerRow = (screenWidth / (bubbleSize + bubbleSpacing)).floor(); // Adjusted for spacing
+    const bubbleSize = 50.0; // Fixed bubble size for consistency
+    const bubbleSpacing = 22.0; // Space between bubbles
+    final bubblesPerRow = (screenWidth / (bubbleSize + bubbleSpacing))
+        .floor(); // Adjusted for spacing
     final bubblesPerColumn = (_numberOfBubbles / bubblesPerRow).ceil();
 
     List<Bubble> bubbles = [];
@@ -73,7 +74,8 @@ class _BubbleWrapScreenState extends State<BubbleWrapScreen> {
     _confettiController.play();
 
     if (_bubbles.every((bubble) => bubble.isPopped)) {
-      Future.delayed(const Duration(milliseconds: 500), _showCongratulationsMessage);
+      Future.delayed(
+          const Duration(milliseconds: 500), _showCongratulationsMessage);
     }
   }
 
@@ -83,7 +85,8 @@ class _BubbleWrapScreenState extends State<BubbleWrapScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Congratulations!'),
-          content: const Text('You popped all the bubbles! 🎉 Great job on managing your stress!'),
+          content: const Text(
+              'You popped all the bubbles! 🎉 Great job on managing your stress!'),
           actions: [
             TextButton(
               onPressed: () {
@@ -106,8 +109,10 @@ class _BubbleWrapScreenState extends State<BubbleWrapScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Bubble Wrap', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-        backgroundColor: const Color(0xFF0B3534), // Darker teal color matching bubbles
+        title: const Text('Bubble Wrap',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+        backgroundColor:
+            const Color(0xFF0B3534), // Darker teal color matching bubbles
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -121,7 +126,10 @@ class _BubbleWrapScreenState extends State<BubbleWrapScreen> {
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFFB2EBF2), Color(0xFF00796B)], // Light aqua to teal for a fresh vibe
+                colors: [
+                  Color(0xFFB2EBF2),
+                  Color(0xFF00796B)
+                ], // Light aqua to teal for a fresh vibe
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -140,16 +148,19 @@ class _BubbleWrapScreenState extends State<BubbleWrapScreen> {
                       margin: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: bubble.isPopped ? Colors.transparent : Colors.white.withOpacity(0.5), // Transparent white
+                        color: bubble.isPopped
+                            ? Colors.transparent
+                            : Colors.white
+                                .withOpacity(0.5), // Transparent white
                         boxShadow: bubble.isPopped
                             ? []
                             : [
-                          BoxShadow(
-                            color: Colors.white.withOpacity(0.4),
-                            blurRadius: 6,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
+                                BoxShadow(
+                                  color: Colors.white.withOpacity(0.4),
+                                  blurRadius: 6,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
                       ),
                       transform: bubble.isPopped
                           ? Matrix4.identity()
@@ -165,7 +176,7 @@ class _BubbleWrapScreenState extends State<BubbleWrapScreen> {
             child: ConfettiWidget(
               confettiController: _confettiController,
               blastDirectionality: BlastDirectionality.explosive,
-              colors: [
+              colors: const [
                 Colors.red,
                 Colors.green,
                 Colors.blue,

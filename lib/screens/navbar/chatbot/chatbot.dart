@@ -1,103 +1,128 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class ChatbotScreen extends StatefulWidget {
-  const ChatbotScreen({Key? key}) : super(key: key);
+  const ChatbotScreen({super.key});
 
   @override
   _ChatbotScreenState createState() => _ChatbotScreenState();
 }
 
 class _ChatbotScreenState extends State<ChatbotScreen> {
-  final List<Map<String, String>> _messages = [];
+  final List<ChatMessage> _messages = [];
   final TextEditingController _controller = TextEditingController();
-  int _currentIndex = 0; // Set the default index for the bottom navigation
+  final ScrollController _scrollController = ScrollController();
 
-  void _sendMessage(String message) {
-    setState(() {
-      _messages.add({"sender": "You", "message": message});
-      _messages.add({"sender": "Bot", "message": "I received your message: $message"});
-    });
-    _controller.clear();
-  }
+  Future<void> _sendMessage(String message) async {
+    if (message.trim().isEmpty) return;
 
-  Widget _buildMessageBubble(String sender, String message) {
-    final isUserMessage = sender == "You";
-    return Align(
-      alignment: isUserMessage ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: isUserMessage ? Color(0xFF0B3534) : Colors.grey.shade300,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Text(
-          "$sender: $message", // Format message to include sender
-          style: TextStyle(
-            color: isUserMessage ? Colors.white : Colors.black,
-            fontSize: 16, // Increased font size
-          ),
-        ),
-      ),
+    final userMessage = ChatMessage(
+      text: message,
+      sender: MessageSender.user,
+      timestamp: DateTime.now(),
     );
+
+    setState(() {
+      _messages.add(userMessage);
+    });
+    _scrollToBottom();
+    _controller.clear();
+
+    try {
+      final response = await http.post(
+        Uri.parse('http://192.168.41.180:5000/chat'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'message': message}),
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        final botMessage = ChatMessage(
+          text: responseData['reply'],
+          sender: MessageSender.bot,
+          timestamp: DateTime.now(),
+        );
+
+        setState(() {
+          _messages.add(botMessage);
+        });
+        _scrollToBottom();
+      } else {
+        _handleError('Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      _handleError(e.toString());
+    }
   }
 
-  Widget _buildBottomNavigationBar() {
+  void _handleError(String error) {
+    final errorMessage = ChatMessage(
+      text: error,
+      sender: MessageSender.system,
+      timestamp: DateTime.now(),
+    );
+
+    setState(() {
+      _messages.add(errorMessage);
+    });
+    _scrollToBottom();
+  }
+
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
+  Widget _buildMessageInput() {
     return Container(
-      height: 90,
-      child: BottomNavigationBar(
-        backgroundColor: const Color(0xFF0B3534),
-        currentIndex: _currentIndex,
-        onTap: (int index) {
-          setState(() {
-            _currentIndex = index;
-          });
-          // Navigate to different screens based on index
-          switch (_currentIndex) {
-            case 0:
-              Navigator.pushNamed(context, '/chatbot');
-              break;
-            case 1:
-              Navigator.pushNamed(context, '/music');
-              break;
-            case 2:
-              Navigator.pushNamed(context, '/home');
-              break;
-            case 3:
-              Navigator.pushNamed(context, '/games');
-              break;
-            case 4:
-              Navigator.pushNamed(context, '/profile');
-              break;
-          }
-        },
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble_outline),
-            label: 'ChatBot',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.music_note),
-            label: 'Music',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.games_outlined),
-            label: 'Games',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: 'Profile',
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 5,
           ),
         ],
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.green[300],
-        selectedLabelStyle: TextStyle(color: Colors.green[300]),
-        unselectedLabelStyle: TextStyle(color: Colors.green[300]),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _controller,
+              decoration: InputDecoration(
+                hintText: 'Type your message...',
+                filled: true,
+                fillColor: Colors.grey[100],
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+              onSubmitted: _sendMessage,
+            ),
+          ),
+          const SizedBox(width: 8),
+          CircleAvatar(
+            backgroundColor: const Color(0xFF0B3534),
+            child: IconButton(
+              icon: const Icon(Icons.send, color: Colors.white),
+              onPressed: () => _sendMessage(_controller.text),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -105,52 +130,97 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Chatbot')),
-      backgroundColor: const Color(0xFFF3FFFF),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            const CircleAvatar(
+              backgroundColor: Colors.white,
+              child: Icon(Icons.support_agent, color: Color(0xFF0B3534)),
+            ),
+            const SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Stress Support Bot',
+                    style: TextStyle(fontSize: 16)),
+                Text('Online',
+                    style: TextStyle(fontSize: 12, color: Colors.green[300])),
+              ],
+            ),
+          ],
+        ),
+        backgroundColor: const Color(0xFF0B3534),
+      ),
       body: Column(
         children: [
           Expanded(
             child: ListView.builder(
+              controller: _scrollController,
               itemCount: _messages.length,
               itemBuilder: (context, index) {
-                return _buildMessageBubble(_messages[index]["sender"]!, _messages[index]["message"]!);
+                return _messages[index].buildMessageBubble();
               },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    decoration: InputDecoration(
-                      hintText: 'Type a message...',
-                      hintStyle: TextStyle(color: Colors.black.withOpacity(0.6)),
-                      fillColor: Colors.black.withOpacity(0.1),
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                    style: const TextStyle(color: Colors.black),
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.send, color: Colors.black),
-                  onPressed: () {
-                    if (_controller.text.isNotEmpty) {
-                      _sendMessage(_controller.text);
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
+          _buildMessageInput(),
         ],
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
+    );
+  }
+}
+
+enum MessageSender { user, bot, system }
+
+class ChatMessage {
+  final String text;
+  final MessageSender sender;
+  final DateTime timestamp;
+
+  ChatMessage({
+    required this.text,
+    required this.sender,
+    required this.timestamp,
+  });
+
+  Widget buildMessageBubble() {
+    bool isUser = sender == MessageSender.user;
+    bool isSystem = sender == MessageSender.system;
+
+    return Align(
+      alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        constraints: BoxConstraints(maxWidth: 300),
+        decoration: BoxDecoration(
+          color: isUser
+              ? const Color(0xFF0B3534)
+              : isSystem
+                  ? Colors.red[100]
+                  : Colors.grey[200],
+          borderRadius: BorderRadius.circular(16),
+        ),
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              text,
+              style: TextStyle(
+                color: isUser ? Colors.white : Colors.black,
+                fontSize: 15,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              DateFormat('HH:mm').format(timestamp),
+              style: TextStyle(
+                color: isUser ? Colors.white70 : Colors.black54,
+                fontSize: 10,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

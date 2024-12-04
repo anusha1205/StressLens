@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class QnaPage extends StatefulWidget {
+  const QnaPage({super.key});
+
   @override
   _QnaPageState createState() => _QnaPageState();
 }
@@ -73,7 +75,8 @@ class _QnaPageState extends State<QnaPage> {
   void _setSelectedAnswer(String answer) {
     setState(() {
       _selectedAnswer = answer;
-      _questions[_currentQuestionIndex].selectedAnswer = answer; // Store the selected answer
+      _questions[_currentQuestionIndex].selectedAnswer =
+          answer; // Store the selected answer
     });
   }
 
@@ -107,28 +110,41 @@ class _QnaPageState extends State<QnaPage> {
                   Container(
                     padding: const EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
-                      color: Colors.lightBlueAccent.withOpacity(0.3), // Light background color for the question
+                      color: Colors.lightBlueAccent.withOpacity(
+                          0.3), // Light background color for the question
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
                       _questions[_currentQuestionIndex].text,
-                      style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 22, fontWeight: FontWeight.bold),
                     ),
                   ),
                   const SizedBox(height: 20),
                   Column(
-                    children: _questions[_currentQuestionIndex].options.map((option) {
-                      bool isSelected = _selectedAnswer == option; // Check if this option is selected
+                    children:
+                        _questions[_currentQuestionIndex].options.map((option) {
+                      bool isSelected = _selectedAnswer ==
+                          option; // Check if this option is selected
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Center( // Center the button
+                        child: Center(
+                          // Center the button
                           child: ElevatedButton(
                             onPressed: () => _setSelectedAnswer(option),
                             style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 15.0),
-                              backgroundColor: isSelected ? Colors.grey : const Color(0xFF0E8388), // Change color if selected
-                              foregroundColor: isSelected ? const Color(0xFF0E8388) : Colors.white, // Change text color based on selection
-                              minimumSize: const Size(200, 50), // Adjust the width of the button
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 15.0),
+                              backgroundColor: isSelected
+                                  ? Colors.grey
+                                  : const Color(
+                                      0xFF0E8388), // Change color if selected
+                              foregroundColor: isSelected
+                                  ? const Color(0xFF0E8388)
+                                  : Colors
+                                      .white, // Change text color based on selection
+                              minimumSize: const Size(
+                                  200, 50), // Adjust the width of the button
                             ),
                             child: Text(
                               option,
@@ -151,34 +167,37 @@ class _QnaPageState extends State<QnaPage> {
                     onPressed: () {
                       setState(() {
                         _currentQuestionIndex--;
-                        _selectedAnswer = _questions[_currentQuestionIndex].selectedAnswer; // Resume the selected answer
+                        _selectedAnswer = _questions[_currentQuestionIndex]
+                            .selectedAnswer; // Resume the selected answer
                       });
                     },
-                    child: const Text('Back'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF0E8388),
                       foregroundColor: Colors.white,
                       minimumSize: const Size(100, 50),
                     ),
+                    child: const Text('Back'),
                   ),
                 if (_currentQuestionIndex < _questions.length - 1)
                   ElevatedButton(
-                    onPressed: _selectedAnswer != null ? _nextQuestion : null, // Enable button only if an answer is selected
-                    child: const Text('Next'),
+                    onPressed: _selectedAnswer != null ? _nextQuestion : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF0E8388),
                       foregroundColor: Colors.white,
                       minimumSize: const Size(100, 50),
-                    ),
+                    ), // Enable button only if an answer is selected
+                    child: const Text('Next'),
                   ),
-                if (_currentQuestionIndex == _questions.length - 1) // On the last question
+                if (_currentQuestionIndex ==
+                    _questions.length - 1) // On the last question
                   ElevatedButton(
-                    onPressed: _selectedAnswer != null ? _showSummaryDialog : null, // Enable submit button
-                    child: const Text('Submit'),
+                    onPressed:
+                        _selectedAnswer != null ? _showSummaryDialog : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF0E8388),
                       minimumSize: const Size(100, 50),
-                    ),
+                    ), // Enable submit button
+                    child: const Text('Submit'),
                   ),
               ],
             ),

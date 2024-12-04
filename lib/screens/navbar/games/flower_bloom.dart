@@ -6,6 +6,8 @@ void main() {
 }
 
 class FlowerBloomApp extends StatelessWidget {
+  const FlowerBloomApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -15,11 +17,14 @@ class FlowerBloomApp extends StatelessWidget {
 }
 
 class FlowerBloomScreen extends StatefulWidget {
+  const FlowerBloomScreen({super.key});
+
   @override
   _FlowerBloomScreenState createState() => _FlowerBloomScreenState();
 }
 
-class _FlowerBloomScreenState extends State<FlowerBloomScreen> with SingleTickerProviderStateMixin {
+class _FlowerBloomScreenState extends State<FlowerBloomScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _bloomAnimation;
   bool isInhale = true;
@@ -33,22 +38,23 @@ class _FlowerBloomScreenState extends State<FlowerBloomScreen> with SingleTicker
 
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 4),
+      duration: const Duration(seconds: 4),
     )..addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        setState(() {
-          isInhale = !isInhale;
-        });
-        _controller.reverse();
-      } else if (status == AnimationStatus.dismissed) {
-        setState(() {
-          isInhale = !isInhale;
-        });
-        _controller.forward();
-      }
-    });
+        if (status == AnimationStatus.completed) {
+          setState(() {
+            isInhale = !isInhale;
+          });
+          _controller.reverse();
+        } else if (status == AnimationStatus.dismissed) {
+          setState(() {
+            isInhale = !isInhale;
+          });
+          _controller.forward();
+        }
+      });
 
-    _bloomAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(CurvedAnimation(
+    _bloomAnimation =
+        Tween<double>(begin: 0.5, end: 1.0).animate(CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOut,
     ));
@@ -69,7 +75,7 @@ class _FlowerBloomScreenState extends State<FlowerBloomScreen> with SingleTicker
     _controller.forward();
 
     // Start timer
-    _sessionTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _sessionTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         _elapsedTime++;
       });
@@ -88,12 +94,13 @@ class _FlowerBloomScreenState extends State<FlowerBloomScreen> with SingleTicker
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Congratulations!'),
-        content: Text('You have breathed for ${_elapsedTime ~/ 60} minutes and ${_elapsedTime % 60} seconds.'),
+        title: const Text('Congratulations!'),
+        content: Text(
+            'You have breathed for ${_elapsedTime ~/ 60} minutes and ${_elapsedTime % 60} seconds.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: Text('OK'),
+            child: const Text('OK'),
           ),
         ],
       ),
@@ -105,8 +112,9 @@ class _FlowerBloomScreenState extends State<FlowerBloomScreen> with SingleTicker
     return Scaffold(
       backgroundColor: Colors.teal.shade100,
       appBar: AppBar(
-        backgroundColor: Color(0xFF0B3534),
-        title: Text('Flower Bloom', style: TextStyle(color: Colors.white)),
+        backgroundColor: const Color(0xFF0B3534),
+        title:
+            const Text('Flower Bloom', style: TextStyle(color: Colors.white)),
       ),
       body: Center(
         child: Column(
@@ -122,7 +130,7 @@ class _FlowerBloomScreenState extends State<FlowerBloomScreen> with SingleTicker
                 color: Colors.teal.shade900,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ScaleTransition(
               scale: _bloomAnimation,
               child: Image.asset(
@@ -131,16 +139,17 @@ class _FlowerBloomScreenState extends State<FlowerBloomScreen> with SingleTicker
                 width: 200,
               ),
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             ElevatedButton(
               onPressed: isAnimating ? _stopAnimation : _startAnimation,
               style: ElevatedButton.styleFrom(
                 backgroundColor: isAnimating ? Colors.red : Colors.green,
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               ),
               child: Text(
                 isAnimating ? 'Stop' : 'Start',
-                style: TextStyle(fontSize: 18),
+                style: const TextStyle(fontSize: 18),
               ),
             ),
           ],
